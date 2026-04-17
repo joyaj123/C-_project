@@ -1,46 +1,88 @@
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
+using BusBookingSystem.Models;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace BusBookingSystem.Controllers
 {
     public class LogInController : Controller
     {
-        private string connStr = "server=localhost;database=bus_booking_db;user=root;password=1234;";
+        private readonly string _connection;
 
-        // SHOW LOGIN PAGE
+        // Constructor - reads connection string from appsettings.json
+        public LogInController(IConfiguration configuration)
+        {
+            _connection = configuration.GetConnectionString("DefaultConnection")!;
+        }
+
+        // GET: /LogIn/Login
         public IActionResult Login()
         {
             return View();
         }
 
-        // HANDLE LOGIN HON BI BALECH AL SITE 
+        // POST: /LogIn/Login
         [HttpPost]
-        public IActionResult Login(string email, string password) //name of the route
+        public IActionResult Login(string email, string password)
         {
-            using var conn = new MySqlConnection(connStr);
-            conn.Open();
-
-            string query = "SELECT Id, Username FROM Users WHERE Email=@Email AND PasswordHash=@Password";
-
-            using var cmd = new MySqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@Email", email);
-            cmd.Parameters.AddWithValue("@Password", password);
-
-            using var reader = cmd.ExecuteReader();
-
-            if (reader.Read())
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
-                HttpContext.Session.SetInt32("UserId", reader.GetInt32(0));
-                HttpContext.Session.SetString("Username", reader.GetString(1));
-
-                return RedirectToAction("Index", "Home");////////////
+                ViewBag.Error = "Email and password are required";
+                return View();
             }
 
-            ViewBag.Error = "Invalid email or password";
-            return View();
+            // Hash the input password to compare with stored hash
+            string hashedInputPassword;
+            using (var sha256 = SHA256.Create())
+            {
+                var bytes = Encoding.UTF8.GetBytes(password);
+                var hash = sha256.ComputeHash(bytes);
+                hashedInputPassword = Convert.ToBase64String(hash);
+            }
+
+            using (MySqlConnection conn = new MySqlConnection(_connection))
+            {
+                conn.Open();
+
+                string query = "SELECT Id, Username, Email, PasswordHash FROM Users WHERE Email = @email AND PasswordHash = @password";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@email", email);
+                    cmd.Parameters.AddWithValue("@password", hashedInputPassword);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            // Login successful
+                            var user = new User
+                            {
+                                Id = reader.GetInt32("Id"),
+                                Username = reader.GetString("Username"),
+                                Email = reader.GetString("Email")
+                            };
+                            
+                            // Store user info in session
+                            HttpContext.Session.SetString("UserId", user.Id.ToString());
+                            HttpContext.Session.SetString("Username", user.Username);
+                            HttpContext.Session.SetString("Email", user.Email);
+                            
+                            // Redirect to home page after successful login
+                            return RedirectToAction("Index", "Home");///////////////////
+                        }
+                        else
+                        {
+                            ViewBag.Error = "Invalid email or password";
+                            return View();
+                        }
+                    }
+                }
+            }
         }
 
-        // LOGOUT
+        // Logout action
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
