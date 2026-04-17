@@ -1,0 +1,20 @@
+<link rel="stylesheet" href="~/css/Register.css" />
+
+<form method="post" asp-action="Register">
+
+<input type="text" name="Username" required placeholder="Username"/>
+<br /><br />
+
+<input type="email" name="Email" placeholder="Email" required />
+<br /><br />
+
+<input type="password" name="Password" placeholder="Password" required />
+<br /><br />
+
+<button type="submit">Create Account</button>
+
+</form>
+@if (ViewBag.Error != null)
+{
+    <p style="color:red">@ViewBag.Error</p>
+}
