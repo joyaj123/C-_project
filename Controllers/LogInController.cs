@@ -13,7 +13,7 @@ namespace BusBookingSystem.Controllers
             return View();
         }
 
-        // HANDLE LOGIN
+        // HANDLE LOGIN HON BI BALECH AL SITE 
         [HttpPost]
         public IActionResult Login(string email, string password) //name of the route
         {
@@ -33,7 +33,7 @@ namespace BusBookingSystem.Controllers
                 HttpContext.Session.SetInt32("UserId", reader.GetInt32(0));
                 HttpContext.Session.SetString("Username", reader.GetString(1));
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home");////////////
             }
 
             ViewBag.Error = "Invalid email or password";
