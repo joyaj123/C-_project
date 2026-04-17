@@ -1,24 +1,105 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using BusBookingSystem.Models;
+using MySql.Data.MySqlClient;
 
-namespace BusBookingSystem.Controllers;
-
-public class HomeController : Controller
+namespace BusBookingSystem.Controllers
 {
-    public IActionResult Index()
+    public class HomeController : Controller
     {
-        return View();
-    }
+        private string connStr =
+            "server=localhost;database=bus_booking_db;user=root;password=1234;";
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        public IActionResult Index()
+        {
+            var trips = new List<object>();
+            object ticket = null;
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            int? userId = HttpContext.Session.GetInt32("UserId");
+
+            using var conn = new MySqlConnection(connStr);
+            conn.Open();
+
+            // =====================================================
+            // 1. LOAD TRIPS
+            // =====================================================
+            string tripQuery = @"
+                SELECT 
+                    Trip.Id,
+                    Bus.Name,
+                    c1.Name AS FromCity,
+                    c2.Name AS ToCity,
+                    Trip.DepartureTime,
+                    Trip.Price
+                FROM Trip
+                JOIN Bus ON Trip.BusId = Bus.Id
+                JOIN Route ON Trip.RouteId = Route.Id
+                JOIN City c1 ON Route.FromCityId = c1.Id
+                JOIN City c2 ON Route.ToCityId = c2.Id
+                ORDER BY Trip.DepartureTime ASC";
+
+            using (var cmd = new MySqlCommand(tripQuery, conn))
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    trips.Add(new
+                    {
+                        Id = reader.GetInt32(0),
+                        BusName = reader.GetString(1),
+                        FromCity = reader.GetString(2),
+                        ToCity = reader.GetString(3),
+                        DepartureTime = reader.GetDateTime(4),
+                        Price = reader.GetDecimal(5)
+                    });
+                }
+            }
+
+            // =====================================================
+            // 2. LOAD USER TICKET (NO PaymentStatus in your DB!)
+            // =====================================================
+            if (userId != null)
+            {
+                string ticketQuery = @"
+                    SELECT 
+                        Id,
+                        Type,
+                        Price,
+                        IsActive,
+                        ActivatedAt,
+                        ExpiresAt
+                    FROM Ticket
+                    WHERE UserId = @UserId
+                    ORDER BY Id DESC
+                    LIMIT 1";
+
+                using var cmd2 = new MySqlCommand(ticketQuery, conn);
+                cmd2.Parameters.AddWithValue("@UserId", userId);
+
+                using var reader2 = cmd2.ExecuteReader();
+
+                if (reader2.Read())
+                {
+                    ticket = new
+                    {
+                        Id = reader2.GetInt32(0),
+                        Type = reader2.GetString(1),
+                        Price = reader2.GetDecimal(2),
+                        IsActive = reader2.GetBoolean(3),
+
+                        // nullable dates (IMPORTANT FIX)
+                        ActivatedAt = reader2.IsDBNull(4)
+                            ? (DateTime?)null
+                            : reader2.GetDateTime(4),
+
+                        ExpiresAt = reader2.IsDBNull(5)
+                            ? (DateTime?)null
+                            : reader2.GetDateTime(5)
+                    };
+                }
+            }
+
+            ViewBag.Ticket = ticket;
+
+            return View(trips);
+        }
     }
 }

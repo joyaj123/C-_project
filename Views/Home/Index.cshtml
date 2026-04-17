@@ -1,8 +1,51 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model List<dynamic>
+
+<h1>🚍 Bus Dashboard</h1>
+
+<!-- TICKET -->
+<div style="padding:15px; border:1px solid black; margin-bottom:20px;">
+    <h2>🎫 Ticket</h2>
+
+    @if (ViewBag.Ticket == null)
+    {
+        <p>No ticket</p>
+        <button>Buy Ticket</button>
+    }
+    else
+    {
+        var t = ViewBag.Ticket;
+
+        <p>Type: @t.Type</p>
+        <p>Payment: @t.PaymentStatus</p>
+
+        @if (t.PaymentStatus != "PAID")
+        {
+            <p style="color:red">Not paid</p>
+        }
+        else if (!t.IsActive)
+        {
+            <p style="color:orange">Not activated</p>
+        }
+        else
+        {
+            <p style="color:green">Active until @t.ExpiresAt</p>
+        }
+    }
+</div>
+
+<!-- TRIPS -->
+<h2>Trips</h2>
+
+<div style="display:flex; flex-wrap:wrap; gap:10px;">
+
+@foreach (var trip in Model)
+{
+    <div style="border:1px solid #ccc; padding:10px; width:250px;">
+        <h3>@trip.BusName</h3>
+        <p>@trip.FromCity → @trip.ToCity</p>
+        <p>@trip.DepartureTime</p>
+        <p>$@trip.Price</p>
+    </div>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
