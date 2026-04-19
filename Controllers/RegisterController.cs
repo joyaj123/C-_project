@@ -128,3 +128,11 @@ namespace BusBookingSystem.Controllers
         }
     }
 }
+
+
+
+
+/*if (HttpContext.Session.GetString("Role") != "Admin")
+{
+    return RedirectToAction("Index", "Home");
+}*/
