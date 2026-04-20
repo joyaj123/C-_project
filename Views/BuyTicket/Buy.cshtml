@@ -1,0 +1,66 @@
+<h2 style="text-align:center;">🎫 Buy Ticket</h2>
+
+<form method="post" action="/BuyTicket/Buy"
+      style="
+        width:350px;
+        margin:30px auto;
+        padding:20px;
+        border-radius:12px;
+        background:#fff;
+        box-shadow:0 4px 12px rgba(0,0,0,0.1);
+        font-family:Arial;
+      ">
+
+    <p style="text-align:center; color:#666;">Choose your plan</p>
+
+    <label style="
+        display:block;
+        padding:10px;
+        margin-bottom:10px;
+        border:1px solid #ddd;
+        border-radius:8px;
+        cursor:pointer;
+    ">
+        <input type="radio" name="duration" value="1day" required />
+        <b>1 Day</b> - $5
+    </label>
+
+    <label style="
+        display:block;
+        padding:10px;
+        margin-bottom:10px;
+        border:1px solid #ddd;
+        border-radius:8px;
+        cursor:pointer;
+    ">
+        <input type="radio" name="duration" value="1week" />
+        <b>1 Week</b> - $20
+    </label>
+
+    <label style="
+        display:block;
+        padding:10px;
+        margin-bottom:15px;
+        border:1px solid #ddd;
+        border-radius:8px;
+        cursor:pointer;
+    ">
+        <input type="radio" name="duration" value="1month" />
+        <b>1 Month</b> - $60
+    </label>
+
+    <button type="submit"
+            style="
+                width:100%;
+                padding:12px;
+                background:#007bff;
+                color:white;
+                border:none;
+                border-radius:8px;
+                font-size:16px;
+                cursor:pointer;
+            ">
+        Buy Now
+    </button>
+
+</form>

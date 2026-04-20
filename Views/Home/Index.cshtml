@@ -9,7 +9,9 @@
     @if (ViewBag.Ticket == null)
     {
         <p style="color:red;">❌ No ticket</p>
-        <button>Buy Ticket</button>
+        <a href="/BuyTicket/Buy">
+       <button type="button">Buy Ticket</button>
+        </a>
     }
     else
     {
