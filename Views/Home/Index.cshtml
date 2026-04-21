@@ -2,6 +2,16 @@
 
 <h1>🚍 Bus Dashboard</h1>
 
+@if (TempData["Error"] != null)
+{
+    <p style="color:red;">@TempData["Error"]</p>
+}
+
+@if (TempData["Success"] != null)
+{
+    <p style="color:green;">@TempData["Success"]</p>
+}
+
 <!-- 🎫 TICKET -->
 <div style="padding:15px; border:1px solid black; margin-bottom:20px;">
     <h2>🎫 Ticket</h2>
@@ -10,7 +20,7 @@
     {
         <p style="color:red;">❌ No ticket</p>
         <a href="/BuyTicket/Buy">
-       <button type="button">Buy Ticket</button>
+            <button type="button">Buy Ticket</button>
         </a>
     }
     else
@@ -23,7 +33,12 @@
         @if (!t.IsActive)
         {
             <p style="color:orange;">⚠️ Ticket not activated</p>
-            <button>Activate Ticket</button>
+
+            <form method="post" asp-action="ActivateTicket" asp-controller="Home"
+                  onsubmit="return confirm('Are you sure you want to activate this ticket?');">
+                <input type="hidden" name="ticketId" value="@t.Id" />
+                <button type="submit">Activate Ticket</button>
+            </form>
         }
         else if (t.ExpiresAt != null && DateTime.Now > t.ExpiresAt)
         {
@@ -31,9 +46,7 @@
         }
         else
         {
-            <p style="color:green;">
-                ✅ Active until @t.ExpiresAt
-            </p>
+            <p style="color:green;">✅ Active until @t.ExpiresAt</p>
         }
     }
 </div>
@@ -54,19 +67,31 @@
         @{
             var t = ViewBag.Ticket;
 
-            bool canTravel = t != null
-                && t.IsActive
-                && (t.ExpiresAt == null || DateTime.Now < t.ExpiresAt);
+            bool hasTicket = t != null;
+            bool isActive = hasTicket && t.IsActive;
+            bool isExpired = hasTicket && t.ExpiresAt != null && DateTime.Now > t.ExpiresAt;
+            bool canTravel = hasTicket && isActive && !isExpired;
         }
 
-        @if (canTravel)
+        @if (!hasTicket)
         {
-            <p style="color:green;">✅ You can travel</p>
-            <button>Book</button>
+            <p style="color:red;">❌ No ticket</p>
+        }
+        else if (!isActive)
+        {
+            <p style="color:orange;">⚠️ Activate your ticket first</p>
+        }
+        else if (isExpired)
+        {
+            <p style="color:red;">❌ Ticket expired</p>
         }
         else
         {
-            <p style="color:red;">❌ Ticket required</p>
+            <p style="color:green;">✅ You can travel</p>
+
+            <form method="post" action="/Booking/Book">
+                <input type="hidden" name="tripId" value="@trip.Id" />
+            </form>
         }
     </div>
 }

@@ -12,23 +12,102 @@ namespace BusBookingSystem.Controllers
             _connection = configuration.GetConnectionString("DefaultConnection")!;
         }
 
-        public IActionResult Index()
+        [HttpPost]
+        public IActionResult ActivateTicket(int ticketId)
         {
-            // ✅ LOGIN CHECK (from BaseController)
             if (!IsLoggedIn())
                 return RedirectToAction("Login", "LogIn");
 
-            var trips = new List<object>();
-            object ticket = null;
-
-            int? userId = GetUserId();
+            int userId = GetUserId();
 
             using var conn = new MySqlConnection(_connection);
             conn.Open();
 
-            // =========================
-            // 1. LOAD TRIPS
-            // =========================
+            string getTicketQuery = @"
+                SELECT Type, IsActive, ExpiresAt
+                FROM Ticket
+                WHERE Id = @Id AND UserId = @UserId";
+
+            string ticketType = "";
+            bool isActive = false;
+            DateTime? expiresAt = null;
+
+            using (var getCmd = new MySqlCommand(getTicketQuery, conn))
+            {
+                getCmd.Parameters.AddWithValue("@Id", ticketId);
+                getCmd.Parameters.AddWithValue("@UserId", userId);
+
+                using var reader = getCmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    ticketType = reader.GetString("Type");
+                    isActive = reader.GetBoolean("IsActive");
+
+                    if (!reader.IsDBNull(reader.GetOrdinal("ExpiresAt")))
+                        expiresAt = reader.GetDateTime("ExpiresAt");
+                }
+                else
+                {
+                    TempData["Error"] = "Ticket not found.";
+                    return RedirectToAction("Index");
+                }
+            }
+
+            if (isActive && expiresAt != null && DateTime.Now <= expiresAt.Value)
+            {
+                TempData["Error"] = "Ticket is already active.";
+                return RedirectToAction("Index");
+            }
+
+            DateTime newExpiresAt;
+
+            if (ticketType == "DAY")
+                newExpiresAt = DateTime.Now.AddDays(1);
+            else if (ticketType == "WEEK")
+                newExpiresAt = DateTime.Now.AddDays(7);
+            else
+                newExpiresAt = DateTime.Now.AddMonths(1);
+
+            string updateQuery = @"
+                UPDATE Ticket
+                SET 
+                    IsActive = 1,
+                    ActivatedAt = @ActivatedAt,
+                    ExpiresAt = @ExpiresAt
+                WHERE Id = @Id AND UserId = @UserId";
+
+            using (var cmd = new MySqlCommand(updateQuery, conn))
+            {
+                cmd.Parameters.AddWithValue("@ActivatedAt", DateTime.Now);
+                cmd.Parameters.AddWithValue("@ExpiresAt", newExpiresAt);
+                cmd.Parameters.AddWithValue("@Id", ticketId);
+                cmd.Parameters.AddWithValue("@UserId", userId);
+
+                int rows = cmd.ExecuteNonQuery();
+
+                if (rows > 0)
+                    TempData["Success"] = "Ticket activated successfully!";
+                else
+                    TempData["Error"] = "Could not activate ticket.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Index()
+        {
+            if (!IsLoggedIn())
+                return RedirectToAction("Login", "LogIn");
+
+            var trips = new List<object>();
+            object? ticket = null;
+
+            int userId = GetUserId();
+
+            using var conn = new MySqlConnection(_connection);
+            conn.Open();
+
             string tripQuery = @"
                 SELECT 
                     Trip.Id,
@@ -61,9 +140,6 @@ namespace BusBookingSystem.Controllers
                 }
             }
 
-            // =========================
-            // 2. LOAD USER TICKET
-            // =========================
             string ticketQuery = @"
                 SELECT 
                     Id,
@@ -91,12 +167,8 @@ namespace BusBookingSystem.Controllers
                         Type = reader2.GetString(1),
                         Price = reader2.GetDecimal(2),
                         IsActive = reader2.GetBoolean(3),
-                        ActivatedAt = reader2.IsDBNull(4)
-                            ? (DateTime?)null
-                            : reader2.GetDateTime(4),
-                        ExpiresAt = reader2.IsDBNull(5)
-                            ? (DateTime?)null
-                            : reader2.GetDateTime(5)
+                        ActivatedAt = reader2.IsDBNull(4) ? (DateTime?)null : reader2.GetDateTime(4),
+                        ExpiresAt = reader2.IsDBNull(5) ? (DateTime?)null : reader2.GetDateTime(5)
                     };
                 }
             }
