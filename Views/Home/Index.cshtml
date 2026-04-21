@@ -2,6 +2,16 @@
 
 <h1>🚍 Bus Dashboard</h1>
 
+@if (TempData["Error"] != null)
+{
+    <p style="color:red;">@TempData["Error"]</p>
+}
+
+@if (TempData["Success"] != null)
+{
+    <p style="color:green;">@TempData["Success"]</p>
+}
+
 <!-- 🎫 TICKET -->
 <div style="padding:15px; border:1px solid black; margin-bottom:20px;">
     <h2>🎫 Ticket</h2>
@@ -10,7 +20,7 @@
     {
         <p style="color:red;">❌ No ticket</p>
         <a href="/BuyTicket/Buy">
-       <button type="button">Buy Ticket</button>
+            <button type="button">Buy Ticket</button>
         </a>
     }
     else
@@ -23,7 +33,12 @@
         @if (!t.IsActive)
         {
             <p style="color:orange;">⚠️ Ticket not activated</p>
-            <button>Activate Ticket</button>
+
+            <form method="post" asp-action="ActivateTicket" asp-controller="Home"
+                  onsubmit="return confirm('Are you sure you want to activate this ticket?');">
+                <input type="hidden" name="ticketId" value="@t.Id" />
+                <button type="submit">Activate Ticket</button>
+            </form>
         }
         else if (t.ExpiresAt != null && DateTime.Now > t.ExpiresAt)
         {
@@ -38,37 +53,100 @@
     }
 </div>
 
+<!-- 🔍 SEARCH TRIPS -->
+<div style="padding:15px; border:1px solid black; margin-bottom:20px;">
+    <h2>🔍 Search Trips</h2>
+
+    <form method="get" asp-action="Index" asp-controller="Home" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <div>
+            <label>From</label><br />
+            <select name="fromCityId">
+                <option value="">All</option>
+                @foreach (var city in ViewBag.Cities)
+                {
+                    if (ViewBag.SelectedFromCityId != null && (int)ViewBag.SelectedFromCityId == city.Id)
+                    {
+                        <option value="@city.Id" selected>@city.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@city.Id">@city.Name</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div>
+            <label>To</label><br />
+            <select name="toCityId">
+                <option value="">All</option>
+                @foreach (var city in ViewBag.Cities)
+                {
+                    if (ViewBag.SelectedToCityId != null && (int)ViewBag.SelectedToCityId == city.Id)
+                    {
+                        <option value="@city.Id" selected>@city.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@city.Id">@city.Name</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div style="margin-top:18px;">
+            <button type="submit">Search</button>
+            <a asp-action="Index" asp-controller="Home" style="margin-left:10px;">Reset</a>
+        </div>
+    </form>
+</div>
+
 <!-- 🚍 TRIPS -->
 <h2>Trips</h2>
 
-<div style="display:flex; flex-wrap:wrap; gap:10px;">
-
-@foreach (var trip in Model)
+@if (Model.Count == 0)
 {
-    <div style="border:1px solid #ccc; padding:10px; width:250px;">
-        <h3>@trip.BusName</h3>
-        <p>@trip.FromCity → @trip.ToCity</p>
-        <p>@trip.DepartureTime</p>
-        <p>$@trip.Price</p>
+    <p style="color:gray;">No trips found.</p>
+}
+else
+{
+    <div style="display:flex; flex-wrap:wrap; gap:10px;">
 
-        @{
-            var t = ViewBag.Ticket;
+    @foreach (var trip in Model)
+    {
+        <div style="border:1px solid #ccc; padding:10px; width:250px;">
+            <h3>@trip.BusName</h3>
+            <p>@trip.FromCity → @trip.ToCity</p>
+            <p>@trip.DepartureTime</p>
+            <p>$@trip.Price</p>
 
-            bool canTravel = t != null
-                && t.IsActive
-                && (t.ExpiresAt == null || DateTime.Now < t.ExpiresAt);
-        }
+            @{
+                var t = ViewBag.Ticket;
 
-        @if (canTravel)
-        {
-            <p style="color:green;">✅ You can travel</p>
-            <button>Book</button>
-        }
-        else
-        {
-            <p style="color:red;">❌ Ticket required</p>
-        }
+                bool hasTicket = t != null;
+                bool isActive = hasTicket && t.IsActive;
+                bool isExpired = hasTicket && t.ExpiresAt != null && DateTime.Now > t.ExpiresAt;
+                bool canTravel = hasTicket && isActive && !isExpired;
+            }
+
+            @if (!hasTicket)
+            {
+                <p style="color:red;">❌ No ticket</p>
+            }
+            else if (!isActive)
+            {
+                <p style="color:orange;">⚠️ Activate your ticket first</p>
+            }
+            else if (isExpired)
+            {
+                <p style="color:red;">❌ Ticket expired</p>
+            }
+            else
+            {
+                <p style="color:green;">✅ You can use this trip</p>
+            }
+        </div>
+    }
+
     </div>
 }
-
-</div>

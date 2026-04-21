@@ -1,66 +1,60 @@
-<h2 style="text-align:center;">🎫 Buy Ticket</h2>
+@model BusBookingSystem.Models.BuyTicketViewModel
 
-<form method="post" action="/BuyTicket/Buy"
-      style="
-        width:350px;
-        margin:30px auto;
-        padding:20px;
-        border-radius:12px;
-        background:#fff;
-        box-shadow:0 4px 12px rgba(0,0,0,0.1);
-        font-family:Arial;
-      ">
+<h1>🎫 Buy Ticket</h1>
 
-    <p style="text-align:center; color:#666;">Choose your plan</p>
+<form asp-action="Buy" method="post" style="max-width:400px; display:flex; flex-direction:column; gap:10px;">
 
-    <label style="
-        display:block;
-        padding:10px;
-        margin-bottom:10px;
-        border:1px solid #ddd;
-        border-radius:8px;
-        cursor:pointer;
-    ">
-        <input type="radio" name="duration" value="1day" required />
-        <b>1 Day</b> - $5
-    </label>
+    <div asp-validation-summary="All" style="color:red;"></div>
 
-    <label style="
-        display:block;
-        padding:10px;
-        margin-bottom:10px;
-        border:1px solid #ddd;
-        border-radius:8px;
-        cursor:pointer;
-    ">
-        <input type="radio" name="duration" value="1week" />
-        <b>1 Week</b> - $20
-    </label>
+    <label>Ticket Duration</label>
+    <select asp-for="Duration">
+        <option value="">-- Select Duration --</option>
+        <option value="1day">1 Day - $5</option>
+        <option value="1week">1 Week - $20</option>
+        <option value="1month">1 Month - $60</option>
+    </select>
+    <span asp-validation-for="Duration" style="color:red;"></span>
 
-    <label style="
-        display:block;
-        padding:10px;
-        margin-bottom:15px;
-        border:1px solid #ddd;
-        border-radius:8px;
-        cursor:pointer;
-    ">
-        <input type="radio" name="duration" value="1month" />
-        <b>1 Month</b> - $60
-    </label>
+    <label>Payer Name</label>
+    <input asp-for="PayerName" />
+    <span asp-validation-for="PayerName" style="color:red;"></span>
 
-    <button type="submit"
-            style="
-                width:100%;
-                padding:12px;
-                background:#007bff;
-                color:white;
-                border:none;
-                border-radius:8px;
-                font-size:16px;
-                cursor:pointer;
-            ">
-        Buy Now
-    </button>
+    <label>Phone Number</label>
+    <input asp-for="PhoneNumber" />
+    <span asp-validation-for="PhoneNumber" style="color:red;"></span>
 
+    <label>Payment Method</label>
+    <select asp-for="PaymentMethod" id="paymentMethod">
+        <option value="">-- Select Method --</option>
+        <option value="CARD">Card</option>
+    </select>
+    <span asp-validation-for="PaymentMethod" style="color:red;"></span>
+
+    <div id="cardBox" style="display:none;">
+        <label>Card Last 4 Digits</label>
+        <input asp-for="CardLast4" maxlength="4" />
+        <span asp-validation-for="CardLast4" style="color:red;"></span>
+    </div>
+
+    <button type="submit">Confirm Purchase</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const paymentMethod = document.getElementById("paymentMethod");
+        const cardBox = document.getElementById("cardBox");
+
+        function toggleCardBox() {
+            if (paymentMethod.value === "CARD") {
+                cardBox.style.display = "block";
+            } else {
+                cardBox.style.display = "none";
+            }
+        }
+
+        paymentMethod.addEventListener("change", toggleCardBox);
+        toggleCardBox();
+    </script>
+}
