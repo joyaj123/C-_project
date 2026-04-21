@@ -95,12 +95,13 @@ namespace BusBookingSystem.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? fromCityId, int? toCityId)
         {
             if (!IsLoggedIn())
                 return RedirectToAction("Login", "LogIn");
 
             var trips = new List<object>();
+            var cities = new List<object>();
             object? ticket = null;
 
             int userId = GetUserId();
@@ -108,6 +109,26 @@ namespace BusBookingSystem.Controllers
             using var conn = new MySqlConnection(_connection);
             conn.Open();
 
+            // Load cities for dropdown
+            string cityQuery = @"
+                SELECT Id, Name
+                FROM City
+                ORDER BY Name ASC";
+
+            using (var cityCmd = new MySqlCommand(cityQuery, conn))
+            using (var cityReader = cityCmd.ExecuteReader())
+            {
+                while (cityReader.Read())
+                {
+                    cities.Add(new
+                    {
+                        Id = cityReader.GetInt32("Id"),
+                        Name = cityReader.GetString("Name")
+                    });
+                }
+            }
+
+            // Load trips with optional filters
             string tripQuery = @"
                 SELECT 
                     Trip.Id,
@@ -121,25 +142,32 @@ namespace BusBookingSystem.Controllers
                 JOIN Route ON Trip.RouteId = Route.Id
                 JOIN City c1 ON Route.FromCityId = c1.Id
                 JOIN City c2 ON Route.ToCityId = c2.Id
+                WHERE (@FromCityId IS NULL OR Route.FromCityId = @FromCityId)
+                  AND (@ToCityId IS NULL OR Route.ToCityId = @ToCityId)
                 ORDER BY Trip.DepartureTime ASC";
 
             using (var cmd = new MySqlCommand(tripQuery, conn))
-            using (var reader = cmd.ExecuteReader())
             {
+                cmd.Parameters.AddWithValue("@FromCityId", (object?)fromCityId ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@ToCityId", (object?)toCityId ?? DBNull.Value);
+
+                using var reader = cmd.ExecuteReader();
+
                 while (reader.Read())
                 {
                     trips.Add(new
                     {
-                        Id = reader.GetInt32(0),
-                        BusName = reader.GetString(1),
-                        FromCity = reader.GetString(2),
-                        ToCity = reader.GetString(3),
-                        DepartureTime = reader.GetDateTime(4),
-                        Price = reader.GetDecimal(5)
+                        Id = reader.GetInt32("Id"),
+                        BusName = reader.GetString("Name"),
+                        FromCity = reader.GetString("FromCity"),
+                        ToCity = reader.GetString("ToCity"),
+                        DepartureTime = reader.GetDateTime("DepartureTime"),
+                        Price = reader.GetDecimal("Price")
                     });
                 }
             }
 
+            // Load latest ticket
             string ticketQuery = @"
                 SELECT 
                     Id,
@@ -163,17 +191,24 @@ namespace BusBookingSystem.Controllers
                 {
                     ticket = new
                     {
-                        Id = reader2.GetInt32(0),
-                        Type = reader2.GetString(1),
-                        Price = reader2.GetDecimal(2),
-                        IsActive = reader2.GetBoolean(3),
-                        ActivatedAt = reader2.IsDBNull(4) ? (DateTime?)null : reader2.GetDateTime(4),
-                        ExpiresAt = reader2.IsDBNull(5) ? (DateTime?)null : reader2.GetDateTime(5)
+                        Id = reader2.GetInt32("Id"),
+                        Type = reader2.GetString("Type"),
+                        Price = reader2.GetDecimal("Price"),
+                        IsActive = reader2.GetBoolean("IsActive"),
+                        ActivatedAt = reader2.IsDBNull(reader2.GetOrdinal("ActivatedAt"))
+                            ? (DateTime?)null
+                            : reader2.GetDateTime("ActivatedAt"),
+                        ExpiresAt = reader2.IsDBNull(reader2.GetOrdinal("ExpiresAt"))
+                            ? (DateTime?)null
+                            : reader2.GetDateTime("ExpiresAt")
                     };
                 }
             }
 
             ViewBag.Ticket = ticket;
+            ViewBag.Cities = cities;
+            ViewBag.SelectedFromCityId = fromCityId;
+            ViewBag.SelectedToCityId = toCityId;
 
             return View(trips);
         }
