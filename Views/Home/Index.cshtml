@@ -12,52 +12,66 @@
     <p style="color:green;">@TempData["Success"]</p>
 }
 
-<!-- 🎫 TICKET -->
+<!--  TICKET SECTION -->
 <div style="padding:15px; border:1px solid black; margin-bottom:20px;">
-    <h2>🎫 Ticket</h2>
 
-    @if (ViewBag.Ticket == null)
-    {
-        <p style="color:red;">❌ No ticket</p>
+    <h2>🎫 My Tickets</h2>
+
+    <!--  BUY BUTTON -->
+    <div style="margin-bottom:10px;">
         <a href="/BuyTicket/Buy">
-            <button type="button">Buy Ticket</button>
+            <button type="button" style="background:green; color:white; padding:8px 12px;">
+                ➕ Buy Ticket
+            </button>
         </a>
+    </div>
+
+    @if (ViewBag.Tickets == null || ViewBag.Tickets.Count == 0)
+    {
+        <p style="color:red;">❌ No tickets available</p>
     }
     else
     {
-        var t = ViewBag.Ticket;
+        <div style="display:flex; flex-wrap:wrap; gap:10px;">
 
-        <p>Type: @t.Type</p>
-        <p>Price: $@t.Price</p>
+        @foreach (var t in ViewBag.Tickets)
+        {
+            <div style="border:1px solid black; padding:10px; width:220px;">
+                <p><strong>Type:</strong> @t.Type</p>
+                <p><strong>Price:</strong> $@t.Price</p>
 
-        @if (!t.IsActive)
-        {
-            <p style="color:orange;">⚠️ Ticket not activated</p>
+                @if (!t.IsActive)
+                {
+                    <p style="color:orange;">⚠️ Not activated</p>
 
-            <form method="post" asp-action="ActivateTicket" asp-controller="Home"
-                  onsubmit="return confirm('Are you sure you want to activate this ticket?');">
-                <input type="hidden" name="ticketId" value="@t.Id" />
-                <button type="submit">Activate Ticket</button>
-            </form>
+                    <form method="post" asp-action="ActivateTicket" asp-controller="Home"
+                          onsubmit="return confirm('Activate this ticket?');">
+                        <input type="hidden" name="ticketId" value="@t.Id" />
+                        <button type="submit">Activate</button>
+                    </form>
+                }
+                else if (t.ExpiresAt != null && DateTime.Now > t.ExpiresAt)
+                {
+                    <p style="color:red;">❌ Expired</p>
+                }
+                else
+                {
+                    <p style="color:green;">✅ Active until @t.ExpiresAt</p>
+                }
+            </div>
         }
-        else if (t.ExpiresAt != null && DateTime.Now > t.ExpiresAt)
-        {
-            <p style="color:red;">❌ Ticket expired</p>
-        }
-        else
-        {
-            <p style="color:green;">
-                ✅ Active until @t.ExpiresAt
-            </p>
-        }
+
+        </div>
     }
 </div>
 
-<!-- 🔍 SEARCH TRIPS -->
+<!--  SEARCH TRIPS -->
 <div style="padding:15px; border:1px solid black; margin-bottom:20px;">
     <h2>🔍 Search Trips</h2>
 
-    <form method="get" asp-action="Index" asp-controller="Home" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+    <form method="get" asp-action="Index" asp-controller="Home"
+          style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+
         <div>
             <label>From</label><br />
             <select name="fromCityId">
@@ -101,7 +115,7 @@
     </form>
 </div>
 
-<!-- 🚍 TRIPS -->
+<!--  TRIPS -->
 <h2>Trips</h2>
 
 @if (Model.Count == 0)
@@ -121,29 +135,17 @@ else
             <p>$@trip.Price</p>
 
             @{
-                var t = ViewBag.Ticket;
+                var tickets = ViewBag.Tickets as List<dynamic>;
 
-                bool hasTicket = t != null;
-                bool isActive = hasTicket && t.IsActive;
-                bool isExpired = hasTicket && t.ExpiresAt != null && DateTime.Now > t.ExpiresAt;
-                bool canTravel = hasTicket && isActive && !isExpired;
+                bool canTravel = tickets != null && tickets.Any(t =>
+                    t.IsActive &&
+                    (t.ExpiresAt == null || DateTime.Now <= t.ExpiresAt)
+                );
             }
 
-            @if (!hasTicket)
+            @if (!canTravel)
             {
-                <p style="color:red;">❌ No ticket</p>
-            }
-            else if (!isActive)
-            {
-                <p style="color:orange;">⚠️ Activate your ticket first</p>
-            }
-            else if (isExpired)
-            {
-                <p style="color:red;">❌ Ticket expired</p>
-            }
-            else
-            {
-                <p style="color:green;">✅ You can use this trip</p>
+                <p style="color:red;">❌ No valid ticket</p>
             }
         </div>
     }
