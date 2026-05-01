@@ -1,0 +1,82 @@
+@model BusBookingSystem.Models.User
+
+@{
+    var activeTickets = ViewBag.ActiveTickets as List<BusBookingSystem.Models.Ticket>;
+    var inactiveTickets = ViewBag.InactiveTickets as List<BusBookingSystem.Models.Ticket>;
+
+    int activeCount = activeTickets?.Count ?? 0;
+    int inactiveCount = inactiveTickets?.Count ?? 0;
+}
+
+<h2>My Profile</h2>
+
+<ul>
+    <li><strong>Name:</strong> @Model.Username</li>
+    <li><strong>Email:</strong> @Model.Email</li>
+    <li><strong>Password:</strong> ********</li>
+
+    <li>
+        <strong>Tickets:</strong>
+
+        <select id="ticketSelector" onchange="filterTickets()">
+            <option value="active">Active Tickets (@activeCount)</option>
+            <option value="inactive">Inactive Tickets (@inactiveCount)</option>
+        </select>
+    </li>
+</ul>
+
+<!-- ACTIVE TICKETS -->
+<div id="activeTickets">
+
+    @if (activeTickets != null && activeTickets.Count > 0)
+    {
+        <ul>
+            @foreach (var ticket in activeTickets)
+            {
+                <li>
+                    <strong>Type:</strong> @ticket.Type <br />
+                    <strong>Price:</strong> @ticket.Price <br />
+                    <strong>Expires:</strong> @ticket.ExpiresAt
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No active tickets</p>
+    }
+</div>
+
+<!-- INACTIVE TICKETS -->
+<div id="inactiveTickets" style="display:none;">
+
+    @if (inactiveTickets != null && inactiveTickets.Count > 0)
+    {
+        <ul>
+            @foreach (var ticket in inactiveTickets)
+            {
+                <li>
+                    <strong>Type:</strong> @ticket.Type <br />
+                    <strong>Price:</strong> @ticket.Price <br />
+                    <strong>Expired At:</strong> @ticket.ExpiresAt
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No inactive tickets</p>
+    }
+</div>
+
+<script>
+    function filterTickets() {
+        var selected = document.getElementById("ticketSelector").value;
+
+        document.getElementById("activeTickets").style.display =
+            selected === "active" ? "block" : "none";
+
+        document.getElementById("inactiveTickets").style.display =
+            selected === "inactive" ? "block" : "none";
+    }
+</script>

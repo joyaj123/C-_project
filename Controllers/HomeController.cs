@@ -102,14 +102,16 @@ namespace BusBookingSystem.Controllers
 
             var trips = new List<object>();
             var cities = new List<object>();
-            object? ticket = null;
+            var tickets = new List<dynamic>();
 
             int userId = GetUserId();
 
             using var conn = new MySqlConnection(_connection);
             conn.Open();
 
-            // Load cities for dropdown
+            // -------------------------
+            // LOAD CITIES
+            // -------------------------
             string cityQuery = @"
                 SELECT Id, Name
                 FROM City
@@ -128,7 +130,9 @@ namespace BusBookingSystem.Controllers
                 }
             }
 
-            // Load trips with optional filters
+            // -------------------------
+            // LOAD TRIPS
+            // -------------------------
             string tripQuery = @"
                 SELECT 
                     Trip.Id,
@@ -167,7 +171,9 @@ namespace BusBookingSystem.Controllers
                 }
             }
 
-            // Load latest ticket
+            // -------------------------
+            // LOAD ALL TICKETS (FIXED)
+            // -------------------------
             string ticketQuery = @"
                 SELECT 
                     Id,
@@ -178,8 +184,7 @@ namespace BusBookingSystem.Controllers
                     ExpiresAt
                 FROM Ticket
                 WHERE UserId = @UserId
-                ORDER BY Id DESC
-                LIMIT 1";
+                ORDER BY Id DESC";
 
             using (var cmd2 = new MySqlCommand(ticketQuery, conn))
             {
@@ -187,9 +192,9 @@ namespace BusBookingSystem.Controllers
 
                 using var reader2 = cmd2.ExecuteReader();
 
-                if (reader2.Read())
+                while (reader2.Read())
                 {
-                    ticket = new
+                    tickets.Add(new
                     {
                         Id = reader2.GetInt32("Id"),
                         Type = reader2.GetString("Type"),
@@ -201,11 +206,23 @@ namespace BusBookingSystem.Controllers
                         ExpiresAt = reader2.IsDBNull(reader2.GetOrdinal("ExpiresAt"))
                             ? (DateTime?)null
                             : reader2.GetDateTime("ExpiresAt")
-                    };
+                    });
                 }
             }
 
-            ViewBag.Ticket = ticket;
+            // -------------------------
+            // CHECK IF USER CAN TRAVEL
+            // -------------------------
+            bool canTravel = tickets.Any(t =>
+                t.IsActive &&
+                (t.ExpiresAt == null || DateTime.Now <= t.ExpiresAt)
+            );
+
+            // -------------------------
+            // VIEWBAG
+            // -------------------------
+            ViewBag.Tickets = tickets;
+            ViewBag.CanTravel = canTravel;
             ViewBag.Cities = cities;
             ViewBag.SelectedFromCityId = fromCityId;
             ViewBag.SelectedToCityId = toCityId;
