@@ -1,18 +1,65 @@
-<link rel="stylesheet" href="~/css/login.css" />
-
-<h2>Login</h2>
-
-<form method="post">
-    <input type="email" name="email" placeholder="Email" required />
-    <br /><br />
-
-    <input type="password" name="password" placeholder="Password" required />
-    <br /><br />
-
-    <button type="submit">Login</button>
-</form>
-
-@if (ViewBag.Error != null)
-{
-    <p style="color:red">@ViewBag.Error</p>
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
 }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Bus Booking System</title>
+    <link rel="stylesheet" href="~/css/login.css" />
+</head>
+
+<body>
+    <div class="page">
+        <div class="left-panel">
+            <div class="brand">
+                <div class="logo">B</div>
+                <span>BusBooking</span>
+            </div>
+
+            <div class="hero-text">
+                <h1>Travel smarter,<br />book faster.</h1>
+                <p>Manage your tickets, trips, and bookings from one simple dashboard.</p>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="login-card">
+                <h2>Welcome back</h2>
+                <p class="subtitle">Please enter your details to sign in.</p>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="error-box">
+                        @ViewBag.Error
+                    </div>
+                }
+
+                <form method="post" asp-controller="LogIn" asp-action="Login">
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-group">
+                        <label>Email address</label>
+                        <input type="email" name="email" placeholder="example@email.com" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Enter your password" required />
+                    </div>
+
+                    <button type="submit" class="login-btn">Sign in</button>
+                </form>
+
+                <p class="register-text">
+                    Don’t have an account?
+                    <a asp-controller="Register" asp-action="Register">Create one</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
