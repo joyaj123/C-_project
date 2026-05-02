@@ -10,7 +10,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// ✅ MUST be here
 app.UseSession();
 
 app.UseAuthorization();

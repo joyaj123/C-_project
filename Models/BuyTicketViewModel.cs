@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BusBookingSystem.Models
 {
-    public class BuyTicketViewModel
+    public class BuyTicketViewModel //used for communication between controller and view 
     {
         [Required(ErrorMessage = "Please select a ticket duration.")]
         public string Duration { get; set; } = "";

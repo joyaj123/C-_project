@@ -1,18 +1,18 @@
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc; //imports
 using MySql.Data.MySqlClient;
-using BusBookingSystem.Models;
+using BusBookingSystem.Models; //import my models
 using System.Security.Cryptography;
 using System.Text;
 
-namespace BusBookingSystem.Controllers
+namespace BusBookingSystem.Controllers //byenteme la hal folder 
 {
-    public class RegisterController : Controller
+    public class RegisterController : Controller //inhertis the controller functions
     {
-        private readonly string _connection;
+        private readonly string _connection; //to get the string privatly
 
         public RegisterController(IConfiguration configuration)
         {
-            _connection = configuration.GetConnectionString("DefaultConnection")!;
+            _connection = configuration.GetConnectionString("DefaultConnection")!; //connect to database form appsettings.json
         }
        
         private bool IsStrongPassword(string password)
@@ -40,14 +40,15 @@ namespace BusBookingSystem.Controllers
         }
 
         // GET: /Register
-        public IActionResult Register()
+        public IActionResult Register() //when the user open this is the first page li ha tbayen which is register  
         {
             return View();
         }
 
         // POST: /Register
         [HttpPost]
-        public IActionResult Register(User user)
+        public IActionResult Register(User user) //what happen when the user register 
+        //user user for model binding so the input in html are connected to the html 
         {
             try
             {
@@ -56,22 +57,22 @@ namespace BusBookingSystem.Controllers
                     string.IsNullOrEmpty(user.Email) ||
                     string.IsNullOrEmpty(user.Password))
                 {
-                    ViewBag.Error = "All fields are required";
-                    return View(user);
+                    ViewBag.Error = "All fields are required"; //to send the error to the view 
+                    return View(user); //return the page with the same input 
                 }
 
                 // Check if email exists
-                using (MySqlConnection conn = new MySqlConnection(_connection))
+                using (MySqlConnection conn = new MySqlConnection(_connection)) //open a connection to the database
                 {
                     conn.Open();
 
                     string checkEmail = "SELECT COUNT(*) FROM Users WHERE Email=@e";
 
-                    using (var checkCmd = new MySqlCommand(checkEmail, conn))
+                    using (var checkCmd = new MySqlCommand(checkEmail, conn)) //create a  the query 
                     {
                         checkCmd.Parameters.AddWithValue("@e", user.Email);
 
-                        int count = Convert.ToInt32(checkCmd.ExecuteScalar());
+                        int count = Convert.ToInt32(checkCmd.ExecuteScalar()); //return one number execute scalar
 
                         if (count > 0)
                         {
@@ -92,9 +93,9 @@ namespace BusBookingSystem.Controllers
                 string hashedPassword;
                 using (var sha256 = SHA256.Create())
                 {
-                    var bytes = Encoding.UTF8.GetBytes(user.Password);
-                    var hash = sha256.ComputeHash(bytes);
-                    hashedPassword = Convert.ToBase64String(hash);
+                    var bytes = Encoding.UTF8.GetBytes(user.Password); 
+                    var hash = sha256.ComputeHash(bytes); //used sha256 for hashing 
+                    hashedPassword = Convert.ToBase64String(hash); //convert to string to save in db 
                 }
 
                 // Insert user
@@ -110,7 +111,7 @@ namespace BusBookingSystem.Controllers
                         cmd.Parameters.AddWithValue("@e", user.Email);
                         cmd.Parameters.AddWithValue("@p", hashedPassword);
 
-                        cmd.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery(); //execute query that doesnt return data
                     }
                 }
 

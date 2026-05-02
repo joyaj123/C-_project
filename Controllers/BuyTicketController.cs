@@ -16,7 +16,7 @@ namespace BusBookingSystem.Controllers
         // GET
         public IActionResult Buy()
         {
-            if (!IsLoggedIn())
+            if (!IsLoggedIn()) //check if the user is logged in 
                 return RedirectToAction("Login", "LogIn");
 
             return View(new BuyTicketViewModel());
