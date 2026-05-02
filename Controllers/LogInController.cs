@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BusBookingSystem.Controllers
 {
-    public class LogInController : Controller
+    public class LogInController : Controller 
     {
         private readonly string _connection;
 
@@ -15,14 +15,20 @@ namespace BusBookingSystem.Controllers
             _connection = configuration.GetConnectionString("DefaultConnection")!;
         }
 
-        public IActionResult Login()
+        public IActionResult Login() //tells ASP.NET what to send to the user 
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost] //when the user login
         public IActionResult Login(string email, string password)
         {
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+         {
+              ViewBag.Error = "Email and password are required";
+              return View();
+         }
             string hashedInputPassword;
 
             using (var sha256 = SHA256.Create())
@@ -32,7 +38,7 @@ namespace BusBookingSystem.Controllers
                 hashedInputPassword = Convert.ToBase64String(hash);
             }
 
-            using var conn = new MySqlConnection(_connection);
+            using var conn = new MySqlConnection(_connection); //we open connection in the db
             conn.Open();
 
             string query = "SELECT Id, Username, Email FROM Users WHERE Email = @email AND PasswordHash = @password";
@@ -47,15 +53,14 @@ namespace BusBookingSystem.Controllers
             {
                 int userId = reader.GetInt32("Id");
 
-                // ✅ FIXED (store INT)
                 HttpContext.Session.SetInt32("UserId", userId);
                 HttpContext.Session.SetString("Username", reader.GetString("Username"));
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home"); // login success we go to home
             }
 
             ViewBag.Error = "Invalid email or password";
-            return View();
+            return View(); // login failed we return view which is the login page itself
         }
 
         public IActionResult Logout()

@@ -17,3 +17,8 @@ namespace BusBookingSystem.Models
 
 
 }
+
+
+/**Store data from forms
+Represent database tables
+Transfer data between View ↔ Controller*/
