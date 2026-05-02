@@ -1,0 +1,114 @@
+/* GENERAL */
+body {
+    background: #f9fafb;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* HEADER */
+.header {
+    background: linear-gradient(135deg, #4f46e5, #3b82f6);
+    color: white;
+    padding: 20px 40px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+}
+
+.logo {
+    width: 35px;
+    height: 35px;
+    background: white;
+    color: #4f46e5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* FILTERS */
+.filters {
+    display: flex;
+    gap: 10px;
+    padding: 20px 40px;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* PRIMARY BUTTON (Search) */
+.search-btn {
+    padding: 10px 16px;
+    background: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.search-btn:hover {
+    background: #4338ca;
+}
+
+/* SECONDARY BUTTON (Reset) */
+.reset-btn {
+    padding: 10px 16px;
+    background: transparent;
+    color: #4f46e5;
+    border: 2px solid #4f46e5;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.reset-btn:hover {
+    background: #eef2ff;
+}
+
+/* TRIPS */
+.trips {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px 40px;
+}
+
+.trip-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.disabled {
+    color: red;
+}
+
+/* TICKETS */
+.tickets {
+    padding: 40px;
+}
+
+.ticket-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.ticket-card.active {
+    border-left: 5px solid #22c55e;
+}
+
+.active-text {
+    color: green;
+}
