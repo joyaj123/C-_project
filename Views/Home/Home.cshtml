@@ -1,0 +1,98 @@
+﻿@model List<dynamic>
+
+@{
+    ViewData["Title"] = "Trips";
+}
+
+<link rel="stylesheet" href="~/css/home.css" />
+
+<div class="page">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="brand">
+            <div class="logo">B</div>
+            <span>BusBooking</span>
+        </div>
+
+        <h2>Available Trips</h2>
+    </div>
+
+    <!-- FILTERS -->
+    <form method="get" class="filters">
+
+    <select name="fromCityId">
+        <option value="">From city</option>
+        @foreach (var city in ViewBag.Cities)
+        {
+            <option value="@city.Id"
+                    selected="@(ViewBag.SelectedFromCityId == city.Id)">
+                @city.Name
+            </option>
+        }
+    </select>
+
+    <select name="toCityId">
+        <option value="">To city</option>
+        @foreach (var city in ViewBag.Cities)
+        {
+            <option value="@city.Id"
+                    selected="@(ViewBag.SelectedToCityId == city.Id)">
+                @city.Name
+            </option>
+        }
+    </select>
+
+    <div class="filter-actions">
+    <button type="submit" class="search-btn">Search</button>
+
+    <button type="button" class="reset-btn" onclick="window.location.href='/Home'">
+        Reset
+    </button>
+</div>
+
+</form>
+
+    <!-- TRIPS -->
+    <div class="trips">
+        @foreach (var trip in Model)
+        {
+            <div class="trip-card">
+                <h3>@trip.FromCity → @trip.ToCity</h3>
+                <p><strong>Bus:</strong> @trip.BusName</p>
+                <p><strong>Time:</strong> @trip.DepartureTime</p>
+                <p><strong>Price:</strong> $@trip.Price</p>
+
+                @if (!ViewBag.CanTravel)
+                {
+                    <span class="disabled">No active ticket</span>
+                }
+            </div>
+        }
+    </div>
+
+    <!-- TICKETS -->
+    <div class="tickets">
+        <h2>Your Tickets</h2>
+
+        @foreach (var ticket in ViewBag.Tickets)
+        {
+            <div class="ticket-card @(ticket.IsActive ? "active" : "")">
+                <p><strong>@ticket.Type</strong> - $@ticket.Price</p>
+
+                @if (ticket.IsActive)
+                {
+                    <p class="active-text">Active until @ticket.ExpiresAt</p>
+                }
+                else
+                {
+                    <form method="post" asp-action="ActivateTicket">
+                        <input type="hidden" name="ticketId" value="@ticket.Id" />
+                        <button type="submit">Activate</button>
+                    </form>
+                }
+            </div>
+        }
+    </div>
+
+</div>

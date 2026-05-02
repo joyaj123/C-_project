@@ -94,8 +94,9 @@ namespace BusBookingSystem.Controllers
 
             return RedirectToAction("Index");
         }
-
-        public IActionResult Index(int? fromCityId, int? toCityId)
+        [HttpGet]
+        [Route("Home")]
+        public IActionResult Home(int? fromCityId, int? toCityId)
         {
             if (!IsLoggedIn())
                 return RedirectToAction("Login", "LogIn");
