@@ -4,14 +4,13 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Login - Bus Booking System</title>
     <link rel="stylesheet" href="~/css/login.css" />
 </head>
-
 <body>
     <div class="page">
         <div class="left-panel">
@@ -22,44 +21,157 @@
 
             <div class="hero-text">
                 <h1>Travel smarter,<br />book faster.</h1>
-                <p>Manage your tickets, trips, and bookings from one simple dashboard.</p>
+                <p>Manage your tickets and trips on one simple platform. Make your trips easier ! </p>
             </div>
+
+            <div style="font-size: 0.8rem; opacity: 0.6;">© 2026 BusBooking · All rights reserved</div>
         </div>
 
         <div class="right-panel">
             <div class="login-card">
                 <h2>Welcome back</h2>
-                <p class="subtitle">Please enter your details to sign in.</p>
+                <p class="subtitle">Please enter your credentials to access your account</p>
 
                 @if (ViewBag.Error != null)
                 {
-                    <div class="error-box">
+                    <div class="error-box" role="alert">
                         @ViewBag.Error
                     </div>
                 }
 
-                <form method="post" asp-controller="LogIn" asp-action="Login">
+                <form id="loginForm" method="post" asp-controller="LogIn" asp-action="Login" novalidate>
                     @Html.AntiForgeryToken()
 
                     <div class="form-group">
                         <label>Email address</label>
-                        <input type="email" name="email" placeholder="example@email.com" required />
+                        <div class="input-icon">
+                            <input type="email" name="email" id="emailInput" placeholder="hello@example.com" value="@ViewBag.PrefilledEmail" autocomplete="email" />
+                        </div>
+                        <div class="field-error" id="emailError" style="font-size: 0.75rem; color: #dc2626; margin-top: 6px; display: none;"></div>
                     </div>
 
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" name="password" placeholder="Enter your password" required />
+                        <div class="password-wrapper">
+                            <input type="password" name="password" id="passwordInput" placeholder="Enter your password" autocomplete="current-password" />
+                            <button type="button" class="toggle-password" id="togglePasswordBtn" aria-label="Show password">👁️</button>
+                        </div>
+                        <div class="field-error" id="passwordError" style="font-size: 0.75rem; color: #dc2626; margin-top: 6px; display: none;"></div>
                     </div>
 
-                    <button type="submit" class="login-btn">Sign in</button>
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="rememberMe" id="rememberMe" value="true" />
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="login-btn">
+                        <span class="btn-text">Sign in</span>
+                        <span class="loader"></span>
+                    </button>
                 </form>
 
                 <p class="register-text">
-                    Don’t have an account?
-                    <a asp-controller="Register" asp-action="Register">Create one</a>
+                    Don't have an account?
+                    <a asp-controller="Register" asp-action="Register">Create an account</a>
                 </p>
             </div>
         </div>
     </div>
+
+    <script>
+        (function() {
+            const form = document.getElementById('loginForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const emailInput = document.getElementById('emailInput');
+            const passwordInput = document.getElementById('passwordInput');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+            const forgotLink = document.getElementById('forgotPasswordLink');
+
+            // Toggle password visibility
+            if (togglePasswordBtn) {
+                togglePasswordBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    togglePasswordBtn.textContent = type === 'password' ? '👁️' : '🙈';
+                });
+            }
+
+            // Forgot password handler
+            if (forgotLink) {
+                forgotLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const emailHint = emailInput.value.trim();
+                    if (emailHint && emailHint.includes('@@')) {
+                        alert('Password reset instructions will be sent to ' + emailHint);
+                    } else {
+                        alert('Please enter your registered email address to reset your password.');
+                    }
+                });
+            }
+
+            // Only validate when clicking the login button
+            form.addEventListener('submit', function(event) {
+                let isValid = true;
+                
+                // Clear previous errors
+                emailError.style.display = 'none';
+                passwordError.style.display = 'none';
+                
+                // Validate email
+                const email = emailInput.value.trim();
+                if (!email) {
+                    emailError.textContent = 'Email address is required';
+                    emailError.style.display = 'block';
+                    isValid = false;
+                } else if (!/^[^\s@@]+@@([^\s@@.,]+\.)+[^\s@@.,]{2,}$/i.test(email)) {
+                    emailError.textContent = 'Please enter a valid email address';
+                    emailError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate password
+                const pwd = passwordInput.value;
+                if (!pwd) {
+                    passwordError.textContent = 'Password cannot be empty';
+                    passwordError.style.display = 'block';
+                    isValid = false;
+                }
+                
+                // If validation fails, prevent form submission
+                if (!isValid) {
+                    event.preventDefault();
+                    return;
+                }
+                
+                // Show loading state
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+            });
+
+            // Reset button state when page loads
+            window.addEventListener('pageshow', function() {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            });
+
+            // Remember me checkbox persistence (optional)
+            const rememberCheckbox = document.getElementById('rememberMe');
+            if (rememberCheckbox) {
+                rememberCheckbox.addEventListener('change', function() {
+                    if (rememberCheckbox.checked) {
+                        localStorage.setItem('rem_checked', 'true');
+                    } else {
+                        localStorage.setItem('rem_checked', 'false');
+                    }
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
