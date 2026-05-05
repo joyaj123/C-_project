@@ -1,43 +1,56 @@
 @model BusBookingSystem.Models.BuyTicketViewModel
 
-<h1>🎫 Buy Ticket</h1>
+<link rel="stylesheet" href="~/css/buy.css" />
+<div class="page">
+    <div class="form-container">
 
-<form asp-action="Buy" method="post" style="max-width:400px; display:flex; flex-direction:column; gap:10px;">
+        <h1>Buy Ticket</h1>
 
-    <div asp-validation-summary="All" style="color:red;"></div>
+        <form asp-action="Buy" asp-controller="BuyTicket" method= "post" >
 
-    <label>Ticket Duration</label>
-    <select asp-for="Duration">
-        <option value="">-- Select Duration --</option>
-        <option value="1day">1 Day - $5</option>
-        <option value="1week">1 Week - $20</option>
-        <option value="1month">1 Month - $60</option>
-    </select>
-    <span asp-validation-for="Duration" style="color:red;"></span>
+            <div asp-validation-summary="All" class="validation-summary-errors"></div>
 
-    <label>Payer Name</label>
-    <input asp-for="PayerName" />
-    <span asp-validation-for="PayerName" style="color:red;"></span>
+            <div class="field">
+                <label>Ticket Duration</label>
+                <select asp-for="Duration">
+                    <option value="">-- Select Duration --</option>
+                    <option value="1day">1 Day - $5</option>
+                    <option value="1week">1 Week - $20</option>
+                    <option value="1month">1 Month - $60</option>
+                </select>
+            </div>
 
-    <label>Phone Number</label>
-    <input asp-for="PhoneNumber" />
-    <span asp-validation-for="PhoneNumber" style="color:red;"></span>
+            <div class="field">
+                <label>Payer Name</label>
+                <input asp-for="PayerName" />
+            </div>
 
-    <label>Payment Method</label>
-    <select asp-for="PaymentMethod" id="paymentMethod">
-        <option value="">-- Select Method --</option>
-        <option value="CARD">Card</option>
-    </select>
-    <span asp-validation-for="PaymentMethod" style="color:red;"></span>
+            <div class="field">
+                <label>Phone Number</label>
+                <input asp-for="PhoneNumber" />
+            </div>
 
-    <div id="cardBox" style="display:none;">
-        <label>Card Last 4 Digits</label>
-        <input asp-for="CardLast4" maxlength="4" />
-        <span asp-validation-for="CardLast4" style="color:red;"></span>
+            <div class="field">
+                <label>Payment Method</label>
+                <select asp-for="PaymentMethod" id="paymentMethod">
+                    <option value="">-- Select Method --</option>
+                    <option value="CARD">Card</option>
+                </select>
+            </div>
+
+            <div id="cardBox">
+                <div class="field">
+                    <label>Card Last 4 Digits</label>
+                    <input asp-for="CardLast4" maxlength="4" />
+                </div>
+            </div>
+
+            <button type="submit">Confirm Purchase</button>
+
+        </form>
+
     </div>
-
-    <button type="submit">Confirm Purchase</button>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -47,14 +60,13 @@
         const cardBox = document.getElementById("cardBox");
 
         function toggleCardBox() {
-            if (paymentMethod.value === "CARD") {
-                cardBox.style.display = "block";
-            } else {
-                cardBox.style.display = "none";
-            }
+            cardBox.style.display = paymentMethod.value === "CARD"
+                ? "block"
+                : "none";
         }
 
         paymentMethod.addEventListener("change", toggleCardBox);
         toggleCardBox();
     </script>
+ 
 }

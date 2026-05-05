@@ -127,7 +127,7 @@ namespace BusBookingSystem.Controllers
                     }
 
                     transaction.Commit();
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Home", "Home");
                 }
                 catch
                 {
