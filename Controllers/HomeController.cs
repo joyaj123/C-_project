@@ -92,7 +92,7 @@ namespace BusBookingSystem.Controllers
                     TempData["Error"] = "Could not activate ticket.";
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Home","Home");
         }
         [HttpGet]
         [Route("Home")]
