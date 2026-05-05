@@ -1,114 +1,237 @@
-/* GENERAL */
-body {
-    background: #f9fafb;
-    font-family: 'Segoe UI', sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap');
+
+/* ===== GLOBAL ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* HEADER */
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background: linear-gradient(145deg, #1948b7 0%, #1e3a8a 100%);
+    color: #0f172a;
+}
+
+/* ===== PAGE WRAPPER ===== */
+.page {
+    max-width: 1300px;
+    margin: auto;
+    padding: 2rem;
+}
+
+/* ===== HEADER ===== */
 .header {
-    background: linear-gradient(135deg, #4f46e5, #3b82f6);
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
     color: white;
-    padding: 20px 40px;
+    padding: 1.5rem 2rem;
+    border-radius: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 20px 35px -15px rgba(0,0,0,0.4);
 }
 
 .brand {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-weight: bold;
+    gap: 12px;
 }
 
 .logo {
-    width: 35px;
-    height: 35px;
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
     background: white;
-    color: #4f46e5;
-    border-radius: 50%;
+    color: #1e3a8a;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 800;
+    font-size: 1.6rem;
 }
 
-/* FILTERS */
+.header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* ===== FILTERS (glass style like login inputs) ===== */
 .filters {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    padding: 1.2rem;
+    border-radius: 24px;
     display: flex;
-    gap: 10px;
-    padding: 20px 40px;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.filters select {
+    flex: 1;
+    height: 48px;
+    border-radius: 18px;
+    border: none;
+    padding: 0 14px;
+    font-size: 0.9rem;
+    background: rgba(255,255,255,0.9);
+    font-family: 'Inter';
+    outline: none;
 }
 
 .filter-actions {
     display: flex;
     gap: 10px;
-    margin-top: 10px;
 }
 
-/* PRIMARY BUTTON (Search) */
+/* ===== BUTTONS ===== */
 .search-btn {
-    padding: 10px 16px;
-    background: #4f46e5;
+    background: #2563eb;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 18px;
+    padding: 0 20px;
+    height: 48px;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: bold;
     transition: 0.2s;
 }
 
 .search-btn:hover {
-    background: #4338ca;
+    background: #1d4ed8;
+    transform: translateY(-1px);
 }
 
-/* SECONDARY BUTTON (Reset) */
 .reset-btn {
-    padding: 10px 16px;
     background: transparent;
-    color: #4f46e5;
-    border: 2px solid #4f46e5;
-    border-radius: 6px;
+    border: 1px solid #93c5fd;
+    color: #dbeafe;
+    border-radius: 18px;
+    padding: 0 20px;
+    height: 48px;
     cursor: pointer;
-    font-weight: bold;
-    transition: 0.2s;
 }
 
 .reset-btn:hover {
-    background: #eef2ff;
+    background: rgba(255,255,255,0.1);
 }
 
-/* TRIPS */
+/* ===== TRIPS ===== */
 .trips {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px 40px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
+/* ===== CARD STYLE (same philosophy as login card) ===== */
 .trip-card {
     background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border-radius: 28px;
+    padding: 1.3rem;
+    box-shadow: 0 20px 30px -15px rgba(0,0,0,0.25);
+    transition: 0.25s;
 }
 
-.disabled {
-    color: red;
+.trip-card:hover {
+    transform: translateY(-5px);
 }
 
-/* TICKETS */
-.tickets {
-    padding: 40px;
-}
-
-.ticket-card {
-    background: white;
-    padding: 15px;
-    border-radius: 10px;
+.trip-card h3 {
+    font-size: 1.2rem;
     margin-bottom: 10px;
+    color: #1e3a8a;
+}
+
+.trip-card p {
+    font-size: 0.85rem;
+    margin: 6px 0;
+    color: #334155;
+}
+
+.trip-card strong {
+    color: #1e293b;
+}
+
+/* DISABLED BADGE */
+.disabled {
+    margin-top: 10px;
+    display: inline-block;
+    font-size: 0.75rem;
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+/* ===== TICKETS SECTION ===== */
+.tickets {
+    background: white;
+    border-radius: 28px;
+    padding: 1.5rem 1.8rem;
+    margin-top: 2rem;
+    box-shadow: 0 8px 24px rgba(30, 58, 138, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* HEADER ROW */
+.tickets-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.tickets-header h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+/* BUY BUTTON */
+.buy-ticket-btn {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+}
+
+.buy-ticket-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+}
+
+/* TICKET CARDS */
+.ticket-card {
+    background: #fefefe;
+    border-radius: 18px;
+    padding: 1rem 1.2rem;
+    border: 1px solid #e5e7eb;
+    transition: 0.2s;
 }
 
 .ticket-card.active {
-    border-left: 5px solid #22c55e;
+    border-left: 5px solid #1e3a8a;
+    background: #f0f7ff;
 }
 
 .active-text {
-    color: green;
+    color: #15803d;
+    font-weight: 600;
+    font-size: 0.8rem;
 }
