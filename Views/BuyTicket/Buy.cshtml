@@ -1,72 +1,196 @@
 @model BusBookingSystem.Models.BuyTicketViewModel
+@{
+    ViewData["Title"] = "Buy Ticket - BusBooking";
+    Layout = null;
+}
 
-<link rel="stylesheet" href="~/css/buy.css" />
-<div class="page">
-    <div class="form-container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Buy Ticket - BusBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="~/css/buy.css" />
+</head>
+<body>
 
-        <h1>Buy Ticket</h1>
-
-        <form asp-action="Buy" asp-controller="BuyTicket" method= "post" >
-
-            <div asp-validation-summary="All" class="validation-summary-errors"></div>
-
-            <div class="field">
-                <label>Ticket Duration</label>
-                <select asp-for="Duration">
-                    <option value="">-- Select Duration --</option>
-                    <option value="1day">1 Day - $5</option>
-                    <option value="1week">1 Week - $20</option>
-                    <option value="1month">1 Month - $60</option>
-                </select>
+    <div class="page">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="brand">
+                <div class="logo">
+                    <i class="fas fa-bus"></i>
+                </div>
+                <span>BusBooking</span>
             </div>
-
-            <div class="field">
-                <label>Payer Name</label>
-                <input asp-for="PayerName" />
+            <div class="nav-links">
+                <a href="/Dashboard/Index" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+               
+                <a href="/Profile" class="nav-link">
+                    <i class="fas fa-user"></i> Account
+                </a>
             </div>
+        </nav>
 
-            <div class="field">
-                <label>Phone Number</label>
-                <input asp-for="PhoneNumber" />
-            </div>
-
-            <div class="field">
-                <label>Payment Method</label>
-                <select asp-for="PaymentMethod" id="paymentMethod">
-                    <option value="">-- Select Method --</option>
-                    <option value="CARD">Card</option>
-                </select>
-            </div>
-
-            <div id="cardBox">
-                <div class="field">
-                    <label>Card Last 4 Digits</label>
-                    <input asp-for="CardLast4" maxlength="4" />
+        <div class="main">
+            <!-- Left Side - Ticket Options -->
+            <div class="ticket-options">
+                <div class="section-title">
+                    <i class="fas fa-ticket-alt"></i>
+                    <h3>Choose your pass</h3>
+                </div>
+                
+                <div class="option-cards">
+                    <label class="option-card" id="option1day">
+                        <input type="radio" name="duration" value="1day" />
+                        <div class="card-content">
+                            <div class="card-icon">🎫</div>
+                            <div class="card-info">
+                                <h4>1 Day Pass</h4>
+                                <p>Perfect for short trips</p>
+                            </div>
+                            <div class="card-price">$5</div>
+                        </div>
+                    </label>
+                    
+                    <label class="option-card" id="option1week">
+                        <input type="radio" name="duration" value="1week" />
+                        <div class="card-content">
+                            <div class="card-icon">📆</div>
+                            <div class="card-info">
+                                <h4>1 Week Pass</h4>
+                                <p>Great for commuters</p>
+                            </div>
+                            <div class="card-price">$20</div>
+                        </div>
+                    </label>
+                    
+                    <label class="option-card" id="option1month">
+                        <input type="radio" name="duration" value="1month" />
+                        <div class="card-content">
+                            <div class="card-icon">🌟</div>
+                            <div class="card-info">
+                                <h4>1 Month Pass</h4>
+                                <p>Best value</p>
+                            </div>
+                            <div class="card-price">$60</div>
+                        </div>
+                    </label>
                 </div>
             </div>
 
-            <button type="submit">Confirm Purchase</button>
+            <!-- Right Side - Payment Form -->
+            <div class="payment-form">
+                <div class="section-title">
+                    <i class="fas fa-credit-card"></i>
+                    <h3>Payment details</h3>
+                </div>
 
-        </form>
+                <form asp-action="Buy" asp-controller="BuyTicket" method="post" id="purchaseForm">
+                    <div asp-validation-summary="All" class="validation-summary"></div>
+                    
+                    <input type="hidden" id="selectedDuration" name="Duration" />
 
+                    <div class="form-field">
+                        <div class="field-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="field-input">
+                            <input asp-for="PayerName" placeholder="Full name" />
+                            <label>Full name</label>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <div class="field-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="field-input">
+                            <input asp-for="PhoneNumber" placeholder="Phone number" />
+                            <label>Phone number</label>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <div class="field-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="field-input">
+                            <select asp-for="PaymentMethod" id="paymentMethod">
+                                <option value="">Select payment</option>
+                                <option value="CARD">Credit / Debit Card</option>
+                            </select>
+                            <label>Payment method</label>
+                        </div>
+                    </div>
+
+                    <div id="cardField" class="form-field card-field">
+                        <div class="field-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="field-input">
+                            <input asp-for="CardLast4" maxlength="4" placeholder="••••" />
+                            <label>Last 4 digits</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="pay-btn">
+                        <span>Pay <span id="selectedPrice">$0</span></span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
 
     <script>
-        const paymentMethod = document.getElementById("paymentMethod");
-        const cardBox = document.getElementById("cardBox");
-
-        function toggleCardBox() {
-            cardBox.style.display = paymentMethod.value === "CARD"
-                ? "block"
-                : "none";
+        const radioButtons = document.querySelectorAll('input[name="duration"]');
+        const selectedDuration = document.getElementById('selectedDuration');
+        const selectedPriceSpan = document.getElementById('selectedPrice');
+        const paymentMethod = document.getElementById('paymentMethod');
+        const cardField = document.getElementById('cardField');
+        
+        const prices = {
+            '1day': 5,
+            '1week': 20,
+            '1month': 60
+        };
+        
+        // Handle ticket selection
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    selectedDuration.value = radio.value;
+                    selectedPriceSpan.textContent = `$${prices[radio.value]}`;
+                    
+                    // Update active card style
+                    document.querySelectorAll('.option-card').forEach(card => {
+                        card.classList.remove('active');
+                    });
+                    document.getElementById(`option${radio.value}`).classList.add('active');
+                }
+            });
+        });
+        
+        // Handle payment method
+        function toggleCardField() {
+            cardField.style.display = paymentMethod.value === 'CARD' ? 'flex' : 'none';
         }
-
-        paymentMethod.addEventListener("change", toggleCardBox);
-        toggleCardBox();
+        
+        paymentMethod.addEventListener('change', toggleCardField);
+        toggleCardField();
+        
+        // Auto-select first option
+        if (radioButtons.length > 0) {
+            radioButtons[0].checked = true;
+            selectedDuration.value = radioButtons[0].value;
+            selectedPriceSpan.textContent = `$${prices[radioButtons[0].value]}`;
+            document.getElementById(`option${radioButtons[0].value}`).classList.add('active');
+        }
     </script>
- 
-}
+</body>
+</html>
