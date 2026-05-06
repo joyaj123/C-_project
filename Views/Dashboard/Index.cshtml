@@ -1,14 +1,22 @@
 @{
-    ViewData["Title"] = "Dashboard - GoBus";
+    ViewData["Title"] = "Dashboard - BusBooking";
     Layout = null;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div id="toast" class="toast-success">
+        <i class="fas fa-check-circle"></i>
+        <span>@TempData["Success"]</span>
+    </div>
 }
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard - GoBus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Dashboard - BusBooking</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="~/css/dashboard.css" />
@@ -16,23 +24,20 @@
 <body>
 
     <div class="page">
-
-        <!-- Navbar -->
+        <!-- Navbar (SAME AS TRIPS PAGE) -->
         <nav class="navbar">
             <div class="brand">
                 <div class="logo">
                     <i class="fas fa-bus"></i>
                 </div>
-                <span>GoBus</span>
+                <span>BusBooking</span>
             </div>
-          <div class="nav-links">
-   
-    <a href="/Profile" class="user-menu">
-        <i class="fas fa-user-circle"></i>
-        <span>My Account</span>
-        <i class="fas fa-chevron-down"></i>
-    </a>
-</div>
+            <div class="nav-links">
+                
+                <a href="/Profile" class="nav-link">
+                    <i class="fas fa-user"></i> My Account
+                </a>
+            </div>
         </nav>
 
         <!-- Hero Section -->
@@ -136,7 +141,7 @@
         <div class="cta-section">
             <div class="cta-content">
                 <h3>Ready to start your journey?</h3>
-                <p>Join thousands of travelers who trust GoBus for their daily commute</p>
+                <p>Join thousands of travelers who trust BusBooking for their daily commute</p>
                 <a href="/Home" class="btn-primary">
                     Get Started Now <i class="fas fa-arrow-right"></i>
                 </a>
@@ -149,7 +154,7 @@
                 <div class="footer-brand">
                     <div class="logo">
                         <i class="fas fa-bus"></i>
-                        <span>GoBus</span>
+                        <span>BusBooking</span>
                     </div>
                     <p>Making travel simple and accessible for everyone.</p>
                     <div class="social-links">
@@ -181,31 +186,19 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 GoBus. All rights reserved.</p>
+                <p>© 2024 BusBooking. All rights reserved.</p>
             </div>
         </footer>
-        
     </div>
-    
-    @if (TempData["Success"] != null)
-    {
-        <div id="toast" class="toast-success">
-            <i class="fas fa-check-circle"></i>
-            <span>@TempData["Success"]</span>
-        </div>
-    }
 
     <script>
         const toast = document.getElementById("toast");
         if (toast) {
             setTimeout(() => {
                 toast.style.opacity = "0";
-                setTimeout(() => {
-                    toast.style.display = "none";
-                }, 300);
+                setTimeout(() => toast.style.display = "none", 300);
             }, 3000);
         }
     </script>
-    
 </body>
 </html>
