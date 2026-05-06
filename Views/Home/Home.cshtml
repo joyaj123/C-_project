@@ -34,7 +34,7 @@
                 <span>BusBooking</span>
             </div>
             <div class="nav-links">
-                <a href="/Dashboard" class="nav-link">
+                <a href="/Dashboard/Index" class="nav-link">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
                 <a href="/Profile" class="nav-link">
@@ -207,12 +207,11 @@
                     <div class="trip-info">
                         <span><i class="fas fa-bus"></i> ${t.bus}</span>
                         <span><i class="fas fa-clock"></i> ${t.time}</span>
-                        <span><i class="fas fa-dollar-sign"></i> ${t.price}</span>
                     </div>
                     ${!canTravel ? 
-                        `<div class="trip-locked"><i class="fas fa-lock"></i> Need active ticket</div>` :
-                        `<button class="btn-book" onclick="bookTrip('${t.from}', '${t.to}')">Book Now</button>`
-                    }
+    `<div class="trip-locked"><i class="fas fa-lock"></i> Need active ticket</div>` :
+    ``
+}
                 </div>
             `).join('');
         }
