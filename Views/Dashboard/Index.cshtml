@@ -1,64 +1,211 @@
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Dashboard - GoBus";
     Layout = null;
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard - BusBooking</title>
+    <title>Dashboard - GoBus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="~/css/dashboard.css" />
 </head>
-
 <body>
+
     <div class="page">
 
-        <!-- HERO SECTION -->
-        <div class="hero">
-            <div class="navbar">
-                <div class="brand">
-                    <div class="logo">B</div>
-                    <span>BusBooking</span>
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="brand">
+                <div class="logo">
+                    <i class="fas fa-bus"></i>
                 </div>
+                <span>GoBus</span>
             </div>
+          <div class="nav-links">
+   
+    <a href="/Profile" class="user-menu">
+        <i class="fas fa-user-circle"></i>
+        <span>My Account</span>
+        <i class="fas fa-chevron-down"></i>
+    </a>
+</div>
+        </nav>
 
+        <!-- Hero Section -->
+        <div class="hero">
             <div class="hero-content">
-                <div class="text">
-                    <h1>Explore Lebanon<br />the smarter way.</h1>
+                <div class="hero-text">
+                    <div class="badge">
+                        <i class="fas fa-star"></i>
+                        <span>Trusted by 50,000+ travelers</span>
+                    </div>
+                    <h1>
+                        Explore Lebanon<br />
+                        <span class="gradient-text">the smarter way.</span>
+                    </h1>
                     <p>
                         Book bus tickets, manage trips, and travel easily across cities
                         with our simple and modern platform.
                     </p>
-
-                    <a href="/Home" class="cta-btn">
-                        Go to all trips →
-                    </a>
+                    <div class="hero-buttons">
+                        <a href="/Home" class="btn-primary">
+                            Go to all trips <i class="fas fa-arrow-right"></i>
+                        </a>
+                        
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number">50K+</span>
+                            <span class="stat-label">Happy Travelers</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">200+</span>
+                            <span class="stat-label">Bus Routes</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Support</span>
+                        </div>
+                    </div>
                 </div>
-
                 
+                <div class="hero-image">
+                    <div class="dashboard-preview">
+                        <div class="preview-header">
+                            <div class="preview-dot"></div>
+                            <div class="preview-dot"></div>
+                            <div class="preview-dot"></div>
+                        </div>
+                        <div class="preview-content">
+                            <i class="fas fa-bus"></i>
+                            <p>Your next adventure awaits</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- FEATURES -->
-        <div class="features">
-            <div class="feature">
-                <h3>🎫 Easy Ticketing</h3>
-                <p>Book your tickets in seconds with a smooth experience.</p>
+        <!-- Features Section -->
+        <div class="features-section">
+            <div class="section-header">
+                <span class="section-badge">Why Choose Us</span>
+                <h2>Everything you need for stress-free travel</h2>
+                <p>We make bus travel simple, fast, and reliable</p>
             </div>
-
-            <div class="feature">
-                <h3>⚡ Instant Activation</h3>
-                <p>Activate your tickets anytime and start traveling.</p>
-            </div>
-
-            <div class="feature">
-                <h3>🧭 Smart Trips</h3>
-                <p>Filter trips by city and find the best route instantly.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <h3>Easy Ticketing</h3>
+                    <p>Book your tickets in seconds with our smooth and intuitive booking experience.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Instant Activation</h3>
+                    <p>Activate your tickets instantly and start your journey without any delay.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h3>Smart Trips</h3>
+                    <p>Filter trips by city and find the best route that matches your schedule.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Our dedicated team is always here to help you with any questions.</p>
+                </div>
             </div>
         </div>
-
+        
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <div class="cta-content">
+                <h3>Ready to start your journey?</h3>
+                <p>Join thousands of travelers who trust GoBus for their daily commute</p>
+                <a href="/Home" class="btn-primary">
+                    Get Started Now <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-bus"></i>
+                        <span>GoBus</span>
+                    </div>
+                    <p>Making travel simple and accessible for everyone.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Company</h4>
+                        <a href="#">About Us</a>
+                        <a href="#">Careers</a>
+                        <a href="#">Press</a>
+                    </div>
+                    <div class="link-group">
+                        <h4>Support</h4>
+                        <a href="#">Help Center</a>
+                        <a href="#">Contact Us</a>
+                        <a href="#">FAQs</a>
+                    </div>
+                    <div class="link-group">
+                        <h4>Legal</h4>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 GoBus. All rights reserved.</p>
+            </div>
+        </footer>
+        
     </div>
+    
+    @if (TempData["Success"] != null)
+    {
+        <div id="toast" class="toast-success">
+            <i class="fas fa-check-circle"></i>
+            <span>@TempData["Success"]</span>
+        </div>
+    }
+
+    <script>
+        const toast = document.getElementById("toast");
+        if (toast) {
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                setTimeout(() => {
+                    toast.style.display = "none";
+                }, 300);
+            }, 3000);
+        }
+    </script>
+    
 </body>
 </html>
