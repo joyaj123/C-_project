@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap');
-
-/* ===== GLOBAL ===== */
 * {
     margin: 0;
     padding: 0;
@@ -8,77 +5,179 @@
 }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-    background: linear-gradient(145deg, #1948b7 0%, #1e3a8a 100%);
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f4f7fb 0%, #e8eef5 100%);
     color: #0f172a;
+    line-height: 1.5;
+    min-height: 100vh;
 }
 
-/* ===== PAGE WRAPPER ===== */
 .page {
-    max-width: 1300px;
-    margin: auto;
-    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 40px;
 }
 
-/* ===== HEADER ===== */
-.header {
-    background: linear-gradient(135deg, #1e40af, #3b82f6);
-    color: white;
-    padding: 1.5rem 2rem;
-    border-radius: 28px;
+/* Navbar - EXACT same as Dashboard */
+.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-    box-shadow: 0 20px 35px -15px rgba(0,0,0,0.4);
+    padding: 20px 30px;
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
 }
 
 .brand {
     display: flex;
     align-items: center;
     gap: 12px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
 }
 
 .logo {
-    width: 44px;
-    height: 44px;
-    border-radius: 16px;
-    background: white;
-    color: #1e3a8a;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 1.6rem;
+    font-size: 1.2rem;
 }
 
-.header h2 {
-    font-size: 1.4rem;
-    font-weight: 600;
+.logo i {
+    font-size: 1.2rem;
 }
 
-/* ===== FILTERS (glass style like login inputs) ===== */
-.filters {
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(12px);
-    padding: 1.2rem;
-    border-radius: 24px;
+.nav-links {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    border: 1px solid rgba(255,255,255,0.15);
+    gap: 25px;
 }
 
-.filters select {
-    flex: 1;
-    height: 48px;
-    border-radius: 18px;
-    border: none;
-    padding: 0 14px;
+.nav-link {
+    color: #64748b;
+    text-decoration: none;
+    font-weight: 500;
     font-size: 0.9rem;
-    background: rgba(255,255,255,0.9);
-    font-family: 'Inter';
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #2563eb;
+}
+
+/* Hero Small */
+.hero-small {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.hero-small h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.hero-small p {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+/* Filter Card */
+.filter-card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.filter-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.filter-input {
+    flex: 1;
+    min-width: 180px;
+}
+
+.filter-input label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #64748b;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+.input-wrapper select {
+    width: 100%;
+    padding: 12px 12px 12px 38px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
     outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+}
+
+.input-wrapper select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.swap-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    color: #64748b;
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.swap-icon:hover {
+    background: #e2e8f0;
+    color: #2563eb;
 }
 
 .filter-actions {
@@ -86,176 +185,337 @@ body {
     gap: 10px;
 }
 
-/* ===== BUTTONS ===== */
-.search-btn {
+.btn-search {
     background: #2563eb;
     color: white;
     border: none;
-    border-radius: 18px;
-    padding: 0 20px;
-    height: 48px;
+    padding: 12px 28px;
+    border-radius: 14px;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
 }
 
-.search-btn:hover {
+.btn-search:hover {
     background: #1d4ed8;
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
-.reset-btn {
-    background: transparent;
-    border: 1px solid #93c5fd;
-    color: #dbeafe;
-    border-radius: 18px;
-    padding: 0 20px;
-    height: 48px;
+.btn-reset {
+    background: #f1f5f9;
+    border: none;
+    width: 46px;
+    border-radius: 14px;
     cursor: pointer;
+    color: #64748b;
+    transition: all 0.2s;
+    font-size: 0.9rem;
 }
 
-.reset-btn:hover {
-    background: rgba(255,255,255,0.1);
+.btn-reset:hover {
+    background: #e2e8f0;
+    color: #dc2626;
 }
 
-/* ===== TRIPS ===== */
-.trips {
+/* Results Header */
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.results-count {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.results-count span {
+    color: #2563eb;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* Trips Grid */
+.trips-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
 }
 
-/* ===== CARD STYLE (same philosophy as login card) ===== */
 .trip-card {
     background: white;
-    border-radius: 28px;
-    padding: 1.3rem;
-    box-shadow: 0 20px 30px -15px rgba(0,0,0,0.25);
-    transition: 0.25s;
+    border-radius: 20px;
+    padding: 20px;
+    transition: all 0.2s;
+    border: 1px solid #eef2f6;
+    position: relative;
 }
 
 .trip-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.12);
+    border-color: #e2e8f0;
 }
 
-.trip-card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    color: #1e3a8a;
-}
-
-.trip-card p {
-    font-size: 0.85rem;
-    margin: 6px 0;
-    color: #334155;
-}
-
-.trip-card strong {
-    color: #1e293b;
-}
-
-/* DISABLED BADGE */
-.disabled {
-    margin-top: 10px;
-    display: inline-block;
-    font-size: 0.75rem;
-    background: #fee2e2;
-    color: #b91c1c;
-    padding: 4px 10px;
-    border-radius: 999px;
-}
-
-/* ===== TICKETS SECTION ===== */
-.tickets {
-    background: white;
-    border-radius: 28px;
-    padding: 1.5rem 1.8rem;
-    margin-top: 2rem;
-    box-shadow: 0 8px 24px rgba(30, 58, 138, 0.08);
-    border: 1px solid rgba(59, 130, 246, 0.2);
-
+.trip-route {
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #f1f5f9;
 }
 
-/* HEADER ROW */
+.trip-route .from {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0f172a;
+}
+
+.trip-route .to {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #0f172a;
+}
+
+.trip-route i {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+.trip-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.trip-info span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.trip-info i {
+    color: #2563eb;
+    width: 14px;
+}
+
+.trip-locked {
+    background: #f1f5f9;
+    padding: 10px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-book {
+    width: 100%;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-book:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+/* Tickets Wrapper */
+.tickets-wrapper {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
 .tickets-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
 }
 
 .tickets-header h2 {
-    font-size: 1.6rem;
-    font-weight: 700;
+    font-size: 1.2rem;
+    font-weight: 600;
     color: #0f172a;
 }
 
-/* BUY BUTTON */
-.buy-ticket-btn {
-    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+.tickets-header h2 i {
+    color: #2563eb;
+    margin-right: 8px;
+}
+
+.tickets-header p {
+    font-size: 0.7rem;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.btn-buy {
+    background: #f1f5f9;
+    color: #2563eb;
+    padding: 10px 22px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.btn-buy:hover {
+    background: #e2e8f0;
+}
+
+.tickets-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ticket-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 18px;
+    background: #f8fafc;
+    border-radius: 16px;
+    transition: all 0.2s;
+}
+
+.ticket-item.active {
+    background: #f0fdf4;
+    border-left: 3px solid #10b981;
+}
+
+.ticket-badge i {
+    font-size: 1.3rem;
+}
+
+.ticket-item.active .ticket-badge i {
+    color: #10b981;
+}
+
+.ticket-item:not(.active) .ticket-badge i {
+    color: #f59e0b;
+}
+
+.ticket-details {
+    flex: 1;
+}
+
+.ticket-details h4 {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    color: #0f172a;
+}
+
+.ticket-details .price {
+    font-weight: 700;
+    color: #2563eb;
+    font-size: 0.85rem;
+    margin-right: 10px;
+}
+
+.ticket-details .expiry {
+    font-size: 0.65rem;
+    color: #10b981;
+}
+
+.btn-activate {
+    background: #f59e0b;
     color: white;
     border: none;
-    padding: 10px 18px;
-    border-radius: 999px;
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-size: 0.7rem;
     font-weight: 600;
-    font-size: 0.85rem;
     cursor: pointer;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    transition: all 0.25s ease;
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+    transition: all 0.2s;
 }
 
-.buy-ticket-btn:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+.btn-activate:hover {
+    background: #d97706;
 }
 
-/* TICKET CARDS */
-.ticket-card {
-    background: #fefefe;
-    border-radius: 18px;
-    padding: 1rem 1.2rem;
-    border: 1px solid #e5e7eb;
-    transition: 0.2s;
+/* Empty State */
+.empty {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 50px 20px;
+    background: white;
+    border-radius: 20px;
 }
 
-.ticket-card.active {
-    border-left: 5px solid #1e3a8a;
-    background: #f0f7ff;
+.empty i {
+    font-size: 3rem;
+    color: #cbd5e1;
+    margin-bottom: 15px;
 }
 
-.active-text {
-    color: #15803d;
-    font-weight: 600;
-    font-size: 0.8rem;
+.empty h3 {
+    margin-bottom: 6px;
+    color: #0f172a;
 }
-/* =========================
-   TOAST NOTIFICATION
-========================= */
+
+.empty p {
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+/* Toast */
 .toast-success {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    bottom: 24px;
+    right: 24px;
+    background: #10b981;
     color: white;
-    padding: 14px 20px;
-    border-radius: 12px;
-    font-weight: 600;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    z-index: 9999;
-    animation: slideIn 0.4s ease, fadeOut 0.4s ease 2.5s forwards;
+    padding: 12px 20px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+    transition: opacity 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 @keyframes slideIn {
     from {
         opacity: 0;
-        transform: translateX(40px);
+        transform: translateX(100%);
     }
     to {
         opacity: 1;
@@ -263,9 +523,76 @@ body {
     }
 }
 
-@keyframes fadeOut {
-    to {
-        opacity: 0;
-        transform: translateY(-10px);
+/* Responsive */
+@media (max-width: 900px) {
+    .page {
+        padding: 16px 24px;
+    }
+    
+    .filter-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .swap-icon {
+        align-self: center;
+        transform: rotate(90deg);
+        width: 40px;
+        margin: -8px 0;
+    }
+    
+    .filter-actions {
+        margin-top: 8px;
+    }
+    
+    .btn-search {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .trips-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .nav-links {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .page {
+        padding: 12px 16px;
+    }
+    
+    .hero-small h1 {
+        font-size: 1.5rem;
+    }
+    
+    .filter-card {
+        padding: 18px;
+    }
+    
+    .tickets-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .ticket-item {
+        flex-wrap: wrap;
+    }
+    
+    .trip-info {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .results-header {
+        margin-top: 10px;
     }
 }

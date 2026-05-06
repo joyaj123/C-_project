@@ -1,173 +1,233 @@
 ﻿@model List<dynamic>
+@{
+    ViewData["Title"] = "Trips - BusBooking";
+    Layout = null;
+}
+
 @if (TempData["Success"] != null)
 {
     <div id="toast" class="toast-success">
-        @TempData["Success"]
+        <i class="fas fa-check-circle"></i>
+        <span>@TempData["Success"]</span>
     </div>
 }
-@{
-    ViewData["Title"] = "Trips";
-}
 
-<link rel="stylesheet" href="~/css/home.css?v=3" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Find Trips - BusBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="~/css/home.css" />
+</head>
+<body>
 
-<div class="page">
+    <div class="page">
+        <!-- Navbar (SAME AS DASHBOARD) -->
+        <nav class="navbar">
+            <div class="brand">
+                <div class="logo">
+                    <i class="fas fa-bus"></i>
+                </div>
+                <span>BusBooking</span>
+            </div>
+            <div class="nav-links">
+                <a href="/Dashboard" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="/Profile" class="nav-link">
+                    <i class="fas fa-user"></i> My Account
+                </a>
+            </div>
+        </nav>
 
-    <!-- HEADER -->
-    <div class="header">
-        <div class="brand">
-            <div class="logo">B</div>
-            <span>BusBooking</span>
-        </div>
-        <h2>Available Trips</h2>
-    </div>
+        <main>
+            <!-- Hero -->
+            <div class="hero-small">
+                <h1>Find Your Trip</h1>
+                <p>Search and book bus tickets across Lebanon</p>
+            </div>
 
-    <!-- FILTERS (NO RELOAD) -->
-    <form class="filters" onsubmit="event.preventDefault(); applyFilters();">
-
-        <select name="fromCityId" id="fromSelect">
-            <option value="">From city</option>
-            @foreach (var city in ViewBag.Cities)
-            {
-                <option value="@city.Name">@city.Name</option>
-            }
-        </select>
-
-        <select name="toCityId" id="toSelect">
-            <option value="">To city</option>
-            @foreach (var city in ViewBag.Cities)
-            {
-                <option value="@city.Name">@city.Name</option>
-            }
-        </select>
-
-        <div class="filter-actions">
-            <button type="submit" class="search-btn">Search</button>
-            <button type="button" class="reset-btn" onclick="resetFilters()">Reset</button>
-        </div>
-
-    </form>
-
-    <!-- TRIPS -->
-    <div class="trips" id="tripsContainer">
-        <!-- JS renders here -->
-    </div>
-
-    <!-- TICKETS -->
-<!-- TICKETS -->
-<div class="tickets">
-
-    <div class="tickets-header">
-        <h2>Your Tickets</h2>
-
-    <a asp-controller="BuyTicket" asp-action="Buy" class="buy-ticket-btn">
-    + Buy Ticket
-</a>
-    </div>
-
-    @foreach (var ticket in ViewBag.Tickets)
-    {
-        <div class="ticket-card @(ticket.IsActive ? "active" : "")">
-            <p><strong>@ticket.Type</strong> - $@ticket.Price</p>
-
-            @if (ticket.IsActive)
-            {
-                <p class="active-text">Active until @ticket.ExpiresAt</p>
-            }
-            else
-            {
-                <form method="post" asp-action="ActivateTicket">
-                    <input type="hidden" name="ticketId" value="@ticket.Id" />
-                    <button type="submit">Activate</button>
+            <!-- Filter Card -->
+            <div class="filter-card">
+                <form onsubmit="event.preventDefault(); applyFilters();">
+                    <div class="filter-row">
+                        <div class="filter-input">
+                            <label>From</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <select id="fromSelect">
+                                    <option value="">Select city</option>
+                                    @foreach (var city in ViewBag.Cities)
+                                    {
+                                        <option value="@city.Name">@city.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="swap-icon">
+                            <i class="fas fa-exchange-alt"></i>
+                        </div>
+                        <div class="filter-input">
+                            <label>To</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <select id="toSelect">
+                                    <option value="">Select city</option>
+                                    @foreach (var city in ViewBag.Cities)
+                                    {
+                                        <option value="@city.Name">@city.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="filter-actions">
+                            <button type="submit" class="btn-search">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button type="button" class="btn-reset" onclick="resetFilters()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
                 </form>
-            }
-        </div>
-    }
+            </div>
 
-</div>
+            <!-- Results -->
+            <div class="results-header">
+                <div class="results-count">
+                    <span id="resultsCount">0</span> trips available
+                </div>
+            </div>
 
-</div>
+            <!-- Trips Grid -->
+            <div class="trips-grid" id="tripsContainer"></div>
 
-<script>
-    // ===========================
-    // DATA FROM RAZOR → JS
-    // ===========================
-    const allTrips = [
-        @foreach (var trip in Model)
-        {
-            <text>
+            <!-- Tickets -->
+            <div class="tickets-wrapper">
+                <div class="tickets-header">
+                    <div>
+                        <h2><i class="fas fa-ticket-alt"></i> My Tickets</h2>
+                        <p>Manage your travel passes</p>
+                    </div>
+                    <a asp-controller="BuyTicket" asp-action="Buy" class="btn-buy">
+                        <i class="fas fa-plus"></i> Buy Ticket
+                    </a>
+                </div>
+                <div class="tickets-list">
+                    @foreach (var ticket in ViewBag.Tickets)
+                    {
+                        <div class="ticket-item @(ticket.IsActive ? "active" : "")">
+                            <div class="ticket-badge">
+                                @if (ticket.IsActive)
+                                {
+                                    <i class="fas fa-check-circle"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-hourglass-half"></i>
+                                }
+                            </div>
+                            <div class="ticket-details">
+                                <h4>@ticket.Type</h4>
+                                <span class="price">$@ticket.Price</span>
+                                @if (ticket.IsActive)
+                                {
+                                    <span class="expiry">Valid until @ticket.ExpiresAt</span>
+                                }
+                            </div>
+                            @if (!ticket.IsActive)
+                            {
+                                <form method="post" asp-action="ActivateTicket">
+                                    <input type="hidden" name="ticketId" value="@ticket.Id" />
+                                    <button type="submit" class="btn-activate">Activate</button>
+                                </form>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const allTrips = [
+            @foreach (var trip in Model)
             {
-                from: "@trip.FromCity",
-                to: "@trip.ToCity",
-                bus: "@trip.BusName",
-                time: "@trip.DepartureTime",
-                price: "@trip.Price"
-            },
-            </text>
-        }
-    ];
+                <text>
+                {
+                    from: "@trip.FromCity",
+                    to: "@trip.ToCity",
+                    bus: "@trip.BusName",
+                    time: "@trip.DepartureTime",
+                    price: "@trip.Price"
+                },
+                </text>
+            }
+        ];
 
-    const canTravel = @ViewBag.CanTravel.ToString().ToLower();
+        const canTravel = @ViewBag.CanTravel.ToString().ToLower();
 
-    // ===========================
-    // INITIAL RENDER
-    // ===========================
-    document.addEventListener("DOMContentLoaded", () => {
-        renderTrips(allTrips);
-    });
-
-    // ===========================
-    // FILTER FUNCTION
-    // ===========================
-    function applyFilters() {
-        const from = document.getElementById("fromSelect").value;
-        const to = document.getElementById("toSelect").value;
-
-        const filtered = allTrips.filter(t => {
-            return (!from || t.from === from) &&
-                   (!to || t.to === to);
+        document.addEventListener("DOMContentLoaded", () => {
+            renderTrips(allTrips);
         });
 
-        renderTrips(filtered);
-    }
-
-    function resetFilters() {
-        document.getElementById("fromSelect").value = "";
-        document.getElementById("toSelect").value = "";
-        renderTrips(allTrips);
-    }
-
-    // ===========================
-    // RENDER TRIPS
-    // ===========================
-    function renderTrips(trips) {
-        const container = document.getElementById("tripsContainer");
-
-        if (trips.length === 0) {
-            container.innerHTML = `
-                <div style="grid-column:1/-1;text-align:center;padding:2rem;">
-                    No trips found
-                </div>`;
-            return;
+        function applyFilters() {
+            const from = document.getElementById("fromSelect").value;
+            const to = document.getElementById("toSelect").value;
+            const filtered = allTrips.filter(t => (!from || t.from === from) && (!to || t.to === to));
+            renderTrips(filtered);
         }
 
-        container.innerHTML = trips.map(t => `
-            <div class="trip-card">
-                <h3>${t.from} → ${t.to}</h3>
-                <p><strong>Bus:</strong> ${t.bus}</p>
-                <p><strong>Time:</strong> ${t.time}</p>
-                <p><strong>Price:</strong> $${t.price}</p>
+        function resetFilters() {
+            document.getElementById("fromSelect").value = "";
+            document.getElementById("toSelect").value = "";
+            renderTrips(allTrips);
+        }
 
-                ${!canTravel ? `<p class="disabled">No active ticket</p>` : ``}
-            </div>
-        `).join('');
-    }
-</script>
-   <script>
-    const toast = document.getElementById("toast");
-    if (toast) {
-        setTimeout(() => {
-            toast.style.display = "none";
-        }, 3000);
-    }
-</script>
+        function renderTrips(trips) {
+            const container = document.getElementById("tripsContainer");
+            const countSpan = document.getElementById("resultsCount");
+            countSpan.textContent = trips.length;
+
+            if (trips.length === 0) {
+                container.innerHTML = `<div class="empty"><i class="fas fa-bus"></i><h3>No trips found</h3><p>Try different cities</p></div>`;
+                return;
+            }
+
+            container.innerHTML = trips.map(t => `
+                <div class="trip-card">
+                    <div class="trip-route">
+                        <span class="from">${t.from}</span>
+                        <i class="fas fa-arrow-right"></i>
+                        <span class="to">${t.to}</span>
+                    </div>
+                    <div class="trip-info">
+                        <span><i class="fas fa-bus"></i> ${t.bus}</span>
+                        <span><i class="fas fa-clock"></i> ${t.time}</span>
+                        <span><i class="fas fa-dollar-sign"></i> ${t.price}</span>
+                    </div>
+                    ${!canTravel ? 
+                        `<div class="trip-locked"><i class="fas fa-lock"></i> Need active ticket</div>` :
+                        `<button class="btn-book" onclick="bookTrip('${t.from}', '${t.to}')">Book Now</button>`
+                    }
+                </div>
+            `).join('');
+        }
+
+        function bookTrip(from, to) {
+            alert(`Booking: ${from} → ${to}`);
+        }
+
+        const toast = document.getElementById("toast");
+        if (toast) {
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                setTimeout(() => toast.style.display = "none", 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
