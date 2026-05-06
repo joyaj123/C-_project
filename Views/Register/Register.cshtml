@@ -6,73 +6,403 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Register - Bus Booking System</title>
     <link rel="stylesheet" href="~/css/register.css" />
 </head>
-
 <body>
-    <div class="page">
-        <!-- LEFT SIDE (same as login) -->
-        <div class="left-panel">
+    <div class="container">
+        <!-- Top Bar with Brand -->
+        <div class="top-bar">
             <div class="brand">
                 <div class="logo">B</div>
                 <span>BusBooking</span>
             </div>
-
-            <div class="hero-text">
-                <h1>Start your journey,<br />join today.</h1>
-                <p>Create your account and book trips in seconds.</p>
+            <div class="signin-link">
+                Already have an account? <a asp-controller="LogIn" asp-action="Login">Sign in</a>
             </div>
         </div>
 
-        <!-- RIGHT SIDE -->
-        <div class="right-panel">
-            <div class="register-card">
-                <h2>Create account</h2>
-                <p class="subtitle">Fill in your details to get started.</p>
-
-                @if (ViewBag.Error != null)
-                {
-                    <div class="error-box">
-                        @ViewBag.Error
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="register-container">
+                <!-- Left Side - Benefits Panel -->
+                <div class="benefits-panel">
+                    <div class="benefits-header">
+                        <h2>Join the journey</h2>
+                        <p>Create your account and enjoy exclusive benefits</p>
                     </div>
-                }
-
-                <form method="post" asp-controller="Register" asp-action="Register">
-                    @Html.AntiForgeryToken()
-
-                    <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" name="Username" value="@Model?.Username" required />
+                    
+                    <div class="benefits-list">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🎫</div>
+                            <div class="benefit-text">
+                                <h4>Easy booking</h4>
+                                <p>Book bus tickets in under 2 minutes</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">⭐</div>
+                            <div class="benefit-text">
+                                <h4>Reward points</h4>
+                                <p>Earn points on every trip</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🔔</div>
+                            <div class="benefit-text">
+                                <h4>Real-time updates</h4>
+                                <p>Get instant notifications about your trips</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">💳</div>
+                            <div class="benefit-text">
+                                <h4>Secure payments</h4>
+                                <p>Multiple payment options with 100% security</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label>Email address</label>
-                        <input type="email" name="Email" value="@Model?.Email" required />
+                    <div class="stats">
+                        <div class="stat">
+                            <span class="stat-number">50K+</span>
+                            <span class="stat-label">Happy travelers</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">200+</span>
+                            <span class="stat-label">Bus routes</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label">Support</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side - Registration Form -->
+                <div class="form-panel">
+                    <div class="form-header">
+                        <h2>Create account</h2>
+                        <p>Fill in your details to get started</p>
                     </div>
 
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" name="Password" required />
-                    </div>
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="error-box" role="alert">
+                            @ViewBag.Error
+                        </div>
+                    }
 
-                    <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" name="ConfirmPassword" required />
-                    </div>
-                    <button type="submit" class="login-btn">Sign up</button>
-                </form>
+                    <form id="registerForm" method="post" asp-controller="Register" asp-action="Register" novalidate>
+                        @Html.AntiForgeryToken()
 
-                <p class="register-text">
-                    Already have an account?
-                    <a asp-controller="LogIn" asp-action="Login">Sign in</a>
-                </p>
+                        <!-- Progress Steps -->
+                        <div class="progress-steps">
+                            <div class="step active" data-step="1">1</div>
+                            <div class="step-line"></div>
+                            <div class="step" data-step="2">2</div>
+                            <div class="step-line"></div>
+                            <div class="step" data-step="3">3</div>
+                        </div>
+
+                        <!-- Step 1: Account Info -->
+                        <div class="form-step active" id="step1">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <div class="input-icon">
+                                    <input type="text" name="Username" id="usernameInput" value="@Model?.Username" placeholder="John Doe" autocomplete="name" />
+                                    <span class="input-emoji">👤</span>
+                                </div>
+                                <div class="field-error" id="usernameError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <div class="input-icon">
+                                    <input type="email" name="Email" id="emailInput" value="@Model?.Email" placeholder="hello@example.com" autocomplete="email" />
+                                    <span class="input-emoji">📧</span>
+                                </div>
+                                <div class="field-error" id="emailError"></div>
+                            </div>
+
+                            <button type="button" class="next-btn" id="nextToStep2">Continue</button>
+                        </div>
+
+                        <!-- Step 2: Password -->
+                        <div class="form-step" id="step2">
+                            <div class="form-group">
+                                <label>Password</label>
+                                <div class="password-wrapper">
+                                    <input type="password" name="Password" id="passwordInput" placeholder="Create a strong password" autocomplete="new-password" />
+                                    <span class="input-emoji">🔒</span>
+                                    <button type="button" class="toggle-password" id="togglePasswordBtn">👁️</button>
+                                </div>
+                                <div class="password-strength" id="passwordStrength">
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                    <div class="strength-bar"></div>
+                                </div>
+                                <div class="field-error" id="passwordError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                <div class="password-wrapper">
+                                    <input type="password" name="ConfirmPassword" id="confirmPasswordInput" placeholder="Confirm your password" autocomplete="off" />
+                                    <span class="input-emoji">✓</span>
+                                    <button type="button" class="toggle-password" id="toggleConfirmPasswordBtn">👁️</button>
+                                </div>
+                                <div class="field-error" id="confirmPasswordError"></div>
+                            </div>
+
+                            <div class="button-group">
+                                <button type="button" class="back-btn" id="backToStep1">Back</button>
+                                <button type="button" class="next-btn" id="nextToStep3">Continue</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Terms & Submit -->
+                        <div class="form-step" id="step3">
+                            <div class="terms-container">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="termsCheckbox" />
+                                    <span>I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a></span>
+                                </label>
+                                <div class="field-error" id="termsError"></div>
+                                
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="newsletterCheckbox" />
+                                    <span>Send me travel deals and updates (optional)</span>
+                                </label>
+                            </div>
+
+                            <button type="submit" id="submitBtn" class="register-btn">
+                                <span class="btn-text">Create account</span>
+                                <span class="loader"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        (function() {
+            // Multi-step form handling
+            let currentStep = 1;
+            const steps = document.querySelectorAll('.form-step');
+            const stepIndicators = document.querySelectorAll('.step');
+            
+            function updateSteps(step) {
+                steps.forEach((stepEl, index) => {
+                    if (index + 1 === step) {
+                        stepEl.classList.add('active');
+                    } else {
+                        stepEl.classList.remove('active');
+                    }
+                });
+                
+                stepIndicators.forEach((indicator, index) => {
+                    if (index + 1 <= step) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Navigation buttons
+            document.getElementById('nextToStep2')?.addEventListener('click', () => {
+                if (validateStep1()) {
+                    currentStep = 2;
+                    updateSteps(currentStep);
+                }
+            });
+            
+            document.getElementById('backToStep1')?.addEventListener('click', () => {
+                currentStep = 1;
+                updateSteps(currentStep);
+            });
+            
+            document.getElementById('nextToStep3')?.addEventListener('click', () => {
+                if (validateStep2()) {
+                    currentStep = 3;
+                    updateSteps(currentStep);
+                }
+            });
+            
+            // Password strength meter
+            const passwordInput = document.getElementById('passwordInput');
+            const strengthBars = document.querySelectorAll('.strength-bar');
+            
+            function checkPasswordStrength(password) {
+                let strength = 0;
+                if (password.length >= 6) strength++;
+                if (password.length >= 10) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+                
+                strengthBars.forEach((bar, index) => {
+                    if (index < strength) {
+                        bar.classList.add('active');
+                        if (strength <= 2) bar.style.background = '#ef4444';
+                        else if (strength <= 3) bar.style.background = '#f59e0b';
+                        else bar.style.background = '#10b981';
+                    } else {
+                        bar.classList.remove('active');
+                        bar.style.background = '#e2e8f0';
+                    }
+                });
+                
+                return strength;
+            }
+            
+            passwordInput?.addEventListener('input', (e) => {
+                checkPasswordStrength(e.target.value);
+            });
+            
+            // Toggle password visibility
+            const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+            const toggleConfirmPasswordBtn = document.getElementById('toggleConfirmPasswordBtn');
+            const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+            
+            if (togglePasswordBtn) {
+                togglePasswordBtn.addEventListener('click', () => {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    togglePasswordBtn.textContent = type === 'password' ? '👁️' : '🙈';
+                });
+            }
+            
+            if (toggleConfirmPasswordBtn) {
+                toggleConfirmPasswordBtn.addEventListener('click', () => {
+                    const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    confirmPasswordInput.setAttribute('type', type);
+                    toggleConfirmPasswordBtn.textContent = type === 'password' ? '👁️' : '🙈';
+                });
+            }
+            
+            // Helper function to show errors
+            function showError(elementId, message) {
+                const errorEl = document.getElementById(elementId);
+                errorEl.textContent = message;
+                errorEl.style.display = 'block';
+                // Auto-hide after 3 seconds
+                setTimeout(() => {
+                    if (errorEl) {
+                        errorEl.style.display = 'none';
+                    }
+                }, 3000);
+            }
+            
+            function clearError(elementId) {
+                const errorEl = document.getElementById(elementId);
+                errorEl.style.display = 'none';
+                errorEl.textContent = '';
+            }
+            
+            // Validation functions
+            function validateStep1() {
+                let isValid = true;
+                const username = document.getElementById('usernameInput').value.trim();
+                const email = document.getElementById('emailInput').value.trim();
+                const emailRegex = /^[^\s@@]+@@([^\s@@.,]+\.)+[^\s@@.,]{2,}$/i;
+                
+                clearError('usernameError');
+                clearError('emailError');
+                
+                if (!username) {
+                    showError('usernameError', 'Full name is required');
+                    isValid = false;
+                } else if (username.length < 3) {
+                    showError('usernameError', 'Name must be at least 3 characters');
+                    isValid = false;
+                }
+                
+                if (!email) {
+                    showError('emailError', 'Email address is required');
+                    isValid = false;
+                } else if (!emailRegex.test(email)) {
+                    showError('emailError', 'Please enter a valid email address');
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+            
+            function validateStep2() {
+                let isValid = true;
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                
+                clearError('passwordError');
+                clearError('confirmPasswordError');
+                
+                if (!password) {
+                    showError('passwordError', 'Password is required');
+                    isValid = false;
+                } else if (password.length < 6) {
+                    showError('passwordError', 'Password must be at least 6 characters');
+                    isValid = false;
+                }
+                
+                if (!confirmPassword) {
+                    showError('confirmPasswordError', 'Please confirm your password');
+                    isValid = false;
+                } else if (password !== confirmPassword) {
+                    showError('confirmPasswordError', 'Passwords do not match');
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+            
+            // Final form submission - NO ALERTS!
+            const form = document.getElementById('registerForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const termsCheckbox = document.getElementById('termsCheckbox');
+            const termsError = document.getElementById('termsError');
+            
+            form.addEventListener('submit', (event) => {
+                // Clear previous terms error
+                termsError.style.display = 'none';
+                termsError.textContent = '';
+                
+                // Check terms checkbox
+                if (!termsCheckbox.checked) {
+                    event.preventDefault();
+                    showError('termsError', 'Please accept the Terms of Service and Privacy Policy to continue');
+                    // Scroll to terms error
+                    document.querySelector('.terms-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
+                }
+                
+                // Show loading state
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+            });
+            
+            // Reset button state when page loads
+            window.addEventListener('pageshow', () => {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            });
+            
+            // Optional: Highlight terms checkbox when clicked to remove error
+            termsCheckbox.addEventListener('change', () => {
+                if (termsCheckbox.checked) {
+                    termsError.style.display = 'none';
+                    termsError.textContent = '';
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
