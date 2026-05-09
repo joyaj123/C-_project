@@ -1,0 +1,41 @@
+@model BusBookingSystem.Models.Trip
+
+@{
+    ViewData["Title"] = "Edit Trip";
+}
+
+<h2>Edit Trip</h2>
+
+<form asp-action="Edit" method="post">
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label>Bus ID</label>
+        <input asp-for="BusId" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Route ID</label>
+        <input asp-for="RouteId" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Departure Time</label>
+        <input asp-for="DepartureTime" type="datetime-local" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Price</label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Update
+    </button>
+
+    <a href="/Admin/Admin" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>
