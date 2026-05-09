@@ -1,0 +1,180 @@
+@model List<BusBookingSystem.Models.Trip>
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Admin Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #f5f7fb;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #0d6efd;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-weight: bold;
+        }
+
+        .navbar-brand:hover {
+            color: white;
+        }
+
+        .container-box {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        table {
+            vertical-align: middle;
+        }
+
+        .btn-action {
+            margin-right: 5px;
+        }
+
+        .top-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .badge-admin {
+            background-color: #198754;
+            padding: 8px 14px;
+            border-radius: 30px;
+            color: white;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                BusBooking Admin
+            </a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+
+        <div class="container-box">
+
+            <!-- HEADER -->
+            <div class="top-actions">
+
+                <div>
+                    <h2>Manage Trips</h2>
+                    <span class="badge-admin">
+                        Admin Panel
+                    </span>
+                </div>
+
+                <a href="/Admin/Create"
+                   class="btn btn-primary">
+                    + Add Trip
+                </a>
+
+            </div>
+
+            <!-- TABLE -->
+            <table class="table table-bordered table-hover">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Bus ID</th>
+                        <th>Route ID</th>
+                        <th>Departure Time</th>
+                        <th>Price</th>
+                        <th width="220">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                No trips found
+                            </td>
+                        </tr>
+                    }
+
+                    @foreach (var trip in Model)
+                    {
+                        <tr>
+
+                            <td>@trip.Id</td>
+
+                            <td>@trip.BusId</td>
+
+                            <td>@trip.RouteId</td>
+
+                            <td>
+                                @trip.DepartureTime.ToString("yyyy-MM-dd HH:mm")
+                            </td>
+
+                            <td>
+                                $@trip.Price
+                            </td>
+
+                            <td>
+
+                                <a href="/Admin/Edit/@trip.Id"
+                                   class="btn btn-warning btn-sm btn-action">
+                                    Edit
+                                </a>
+
+                                <a href="/Admin/Delete/@trip.Id"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Are you sure you want to delete this trip?')">
+                                    Delete
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

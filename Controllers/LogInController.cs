@@ -55,8 +55,15 @@ namespace BusBookingSystem.Controllers
 
                 HttpContext.Session.SetInt32("UserId", userId);
                 HttpContext.Session.SetString("Username", reader.GetString("Username"));
-
-                return RedirectToAction("Index", "Dashboard"); // login success we go to home
+             if (email == "admin@gmail.com")
+            {
+                return RedirectToAction("Admin", "Admin");
+             }
+            else
+            {
+                return RedirectToAction("Home", "Home");
+           }
+                
             }
 
             ViewBag.Error = "Invalid email or password";
