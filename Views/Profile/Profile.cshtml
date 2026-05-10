@@ -1,6 +1,8 @@
 @model BusBookingSystem.Models.User
-
 @{
+    ViewData["Title"] = "My Profile - BusBooking";
+    Layout = null;
+
     var activeTickets = ViewBag.ActiveTickets as List<BusBookingSystem.Models.Ticket>;
     var inactiveTickets = ViewBag.InactiveTickets as List<BusBookingSystem.Models.Ticket>;
 
@@ -8,75 +10,191 @@
     int inactiveCount = inactiveTickets?.Count ?? 0;
 }
 
-<h2>My Profile</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>My Profile - BusBooking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="~/css/profile.css" />
+</head>
+<body>
 
-<ul>
-    <li><strong>Name:</strong> @Model.Username</li>
-    <li><strong>Email:</strong> @Model.Email</li>
-    <li><strong>Password:</strong> ********</li>
+    <div class="page">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="brand">
+                <div class="logo">
+                    <i class="fas fa-bus"></i>
+                </div>
+                <span>BusBooking</span>
+            </div>
+            <div class="nav-links">
+                <a href="/Dashboard/Index" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="/Home" class="nav-link">
+                    <i class="fas fa-search"></i> Find Trips
+                </a>
+            </div>
+        </nav>
 
-    <li>
-        <strong>Tickets:</strong>
+        <div class="main">
+            <!-- Left Side - Profile Info -->
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h2>@Model.Username</h2>
+                    <p>Member since @DateTime.Now.Year</p>
+                </div>
 
-        <select id="ticketSelector" onchange="filterTickets()">
-            <option value="active">Active Tickets (@activeCount)</option>
-            <option value="inactive">Inactive Tickets (@inactiveCount)</option>
-        </select>
-    </li>
-</ul>
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="detail-info">
+                            <label>Email Address</label>
+                            <p>@Model.Email</p>
+                        </div>
+                    </div>
 
-<!-- ACTIVE TICKETS -->
-<div id="activeTickets">
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="detail-info">
+                            <label>Password</label>
+                            <p>········</p>
+                        </div>
+                    </div>
 
-    @if (activeTickets != null && activeTickets.Count > 0)
-    {
-        <ul>
-            @foreach (var ticket in activeTickets)
-            {
-                <li>
-                    <strong>Type:</strong> @ticket.Type <br />
-                    <strong>Price:</strong> @ticket.Price <br />
-                    <strong>Expires:</strong> @ticket.ExpiresAt
-                </li>
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <div class="detail-info">
+                            <label>Account Type</label>
+                            <p>Traveler</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="edit-btn" onclick="alert('Edit profile feature coming soon')">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+            </div>
+
+            <!-- Right Side - Tickets -->
+            <div class="tickets-card">
+                <div class="tickets-header">
+                    <h2><i class="fas fa-ticket-alt"></i> My Tickets</h2>
+                    <p>Manage your travel passes</p>
+                </div>
+
+                <!-- Ticket Tabs -->
+                <div class="ticket-tabs">
+                    <button class="tab-btn active" data-tab="active" onclick="switchTab('active')">
+                        <i class="fas fa-check-circle"></i> Active
+                        <span class="badge">@activeCount</span>
+                    </button>
+                    <button class="tab-btn" data-tab="inactive" onclick="switchTab('inactive')">
+                        <i class="fas fa-clock"></i> Inactive
+                        <span class="badge">@inactiveCount</span>
+                    </button>
+                </div>
+
+                <!-- Active Tickets -->
+                <div id="activeTickets" class="tickets-list active">
+                    @if (activeTickets != null && activeTickets.Count > 0)
+                    {
+                        @foreach (var ticket in activeTickets)
+                        {
+                            <div class="ticket-item active">
+                                <div class="ticket-icon">
+                                    <i class="fas fa-ticket-alt"></i>
+                                </div>
+                                <div class="ticket-details">
+                                    <h4>@ticket.Type</h4>
+                                    <div class="ticket-meta">
+                                        <span><i class="fas fa-dollar-sign"></i> @ticket.Price</span>
+                                        <span><i class="fas fa-calendar"></i> Expires: @ticket.ExpiresAt</span>
+                                    </div>
+                                </div>
+                                <div class="ticket-status">
+                                    <span class="status-badge active">Active</span>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="fas fa-ticket-alt"></i>
+                            <p>No active tickets</p>
+                            <a href="/BuyTicket" class="buy-link">Buy a ticket →</a>
+                        </div>
+                    }
+                </div>
+
+                <!-- Inactive Tickets -->
+                <div id="inactiveTickets" class="tickets-list">
+                    @if (inactiveTickets != null && inactiveTickets.Count > 0)
+                    {
+                        @foreach (var ticket in inactiveTickets)
+                        {
+                            <div class="ticket-item inactive">
+                                <div class="ticket-icon">
+                                    <i class="fas fa-ticket-alt"></i>
+                                </div>
+                                <div class="ticket-details">
+                                    <h4>@ticket.Type</h4>
+                                    <div class="ticket-meta">
+                                        <span><i class="fas fa-dollar-sign"></i> @ticket.Price</span>
+                                        <span><i class="fas fa-calendar"></i> Expired: @ticket.ExpiresAt</span>
+                                    </div>
+                                </div>
+                                <div class="ticket-status">
+                                    <span class="status-badge inactive">Expired</span>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="fas fa-ticket-alt"></i>
+                            <p>No inactive tickets</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            var buttons = document.querySelectorAll('.tab-btn');
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active');
             }
-        </ul>
-    }
-    else
-    {
-        <p>No active tickets</p>
-    }
-</div>
-
-<!-- INACTIVE TICKETS -->
-<div id="inactiveTickets" style="display:none;">
-
-    @if (inactiveTickets != null && inactiveTickets.Count > 0)
-    {
-        <ul>
-            @foreach (var ticket in inactiveTickets)
-            {
-                <li>
-                    <strong>Type:</strong> @ticket.Type <br />
-                    <strong>Price:</strong> @ticket.Price <br />
-                    <strong>Expired At:</strong> @ticket.ExpiresAt
-                </li>
+            document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+            
+            var activeDiv = document.getElementById('activeTickets');
+            var inactiveDiv = document.getElementById('inactiveTickets');
+            
+            if (tab === 'active') {
+                activeDiv.classList.add('active');
+                inactiveDiv.classList.remove('active');
+            } else {
+                activeDiv.classList.remove('active');
+                inactiveDiv.classList.add('active');
             }
-        </ul>
-    }
-    else
-    {
-        <p>No inactive tickets</p>
-    }
-</div>
-
-<script>
-    function filterTickets() {
-        var selected = document.getElementById("ticketSelector").value;
-
-        document.getElementById("activeTickets").style.display =
-            selected === "active" ? "block" : "none";
-
-        document.getElementById("inactiveTickets").style.display =
-            selected === "inactive" ? "block" : "none";
-    }
-</script>
+        }
+    </script>
+</body>
+</html>

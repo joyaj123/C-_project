@@ -1,0 +1,507 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f4f7fb 0%, #e8eef5 100%);
+    color: #0f172a;
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+.page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo i {
+    font-size: 1rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 16px;
+}
+
+.nav-link {
+    color: #64748b;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #2563eb;
+}
+
+/* Main Layout */
+.main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+/* Profile Card */
+.profile-card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.avatar i {
+    font-size: 4rem;
+    color: #2563eb;
+    margin-bottom: 8px;
+}
+
+.profile-header h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.profile-header p {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+.profile-details {
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.detail-icon {
+    width: 36px;
+    height: 36px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2563eb;
+}
+
+.detail-info {
+    flex: 1;
+}
+
+.detail-info label {
+    font-size: 0.65rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-info p {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 2px;
+    word-break: break-all;
+}
+
+.edit-btn {
+    width: 100%;
+    background: #f1f5f9;
+    color: #2563eb;
+    border: none;
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.edit-btn:hover {
+    background: #e2e8f0;
+}
+
+/* Tickets Card */
+.tickets-card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tickets-header {
+    margin-bottom: 20px;
+}
+
+.tickets-header h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.tickets-header h2 i {
+    color: #2563eb;
+    margin-right: 8px;
+}
+
+.tickets-header p {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+/* Ticket Tabs */
+.ticket-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 10px;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 6px 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 30px;
+    transition: all 0.2s;
+}
+
+.tab-btn i {
+    font-size: 0.75rem;
+}
+
+.tab-btn .badge {
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    color: #64748b;
+}
+
+.tab-btn.active {
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.tab-btn.active .badge {
+    background: #2563eb;
+    color: white;
+}
+
+/* Tickets List */
+.tickets-list {
+    display: none;
+}
+
+.tickets-list.active {
+    display: block;
+}
+
+.ticket-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: #f8fafc;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+}
+
+.ticket-item:hover {
+    transform: translateX(4px);
+    background: #f1f5f9;
+}
+
+.ticket-item.active {
+    border-left: 3px solid #10b981;
+}
+
+.ticket-item.inactive {
+    border-left: 3px solid #f59e0b;
+}
+
+.ticket-icon i {
+    font-size: 1.5rem;
+    color: #2563eb;
+}
+
+.ticket-details {
+    flex: 1;
+}
+
+.ticket-details h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.ticket-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.ticket-meta span {
+    font-size: 0.65rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ticket-meta i {
+    font-size: 0.6rem;
+}
+
+.status-badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-badge.active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-badge.inactive {
+    background: #fed7aa;
+    color: #92400e;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 30px 16px;
+}
+
+.empty-state i {
+    font-size: 2.5rem;
+    color: #cbd5e1;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+.buy-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.buy-link:hover {
+    text-decoration: underline;
+}
+
+/* Tablet and Desktop */
+@media (min-width: 768px) {
+    .page {
+        padding: 20px 40px;
+    }
+    
+    .navbar {
+        padding: 20px 30px;
+        margin-bottom: 30px;
+    }
+    
+    .brand {
+        font-size: 1.5rem;
+        gap: 12px;
+    }
+    
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .logo i {
+        font-size: 1.2rem;
+    }
+    
+    .nav-links {
+        gap: 25px;
+    }
+    
+    .nav-link {
+        font-size: 0.9rem;
+    }
+    
+    .main {
+        grid-template-columns: 380px 1fr;
+        gap: 30px;
+    }
+    
+    .profile-card {
+        padding: 30px;
+    }
+    
+    .avatar i {
+        font-size: 5rem;
+    }
+    
+    .profile-header h2 {
+        font-size: 1.4rem;
+    }
+    
+    .detail-item {
+        padding: 14px 0;
+        gap: 14px;
+    }
+    
+    .detail-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .tickets-card {
+        padding: 30px;
+    }
+    
+    .ticket-item {
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    .ticket-icon i {
+        font-size: 1.8rem;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    .page {
+        padding: 12px;
+    }
+    
+    .navbar {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+        padding: 12px 16px;
+    }
+    
+    .nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .profile-card {
+        padding: 20px;
+    }
+    
+    .tickets-card {
+        padding: 20px;
+    }
+    
+    .ticket-item {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .ticket-meta {
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .ticket-status {
+        width: 100%;
+        text-align: right;
+    }
+    
+    .ticket-tabs {
+        justify-content: center;
+    }
+    
+    .tab-btn {
+        padding: 5px 12px;
+        font-size: 0.7rem;
+    }
+    
+    .tab-btn i {
+        font-size: 0.7rem;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+    .ticket-tabs {
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .tab-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

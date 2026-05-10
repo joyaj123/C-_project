@@ -37,7 +37,7 @@
                 <a href="/Dashboard/Index" class="nav-link">
                     <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
-                <a href="/Profile" class="nav-link">
+                <a href="/Profile/Profile" class="nav-link">
                     <i class="fas fa-user"></i> My Account
                 </a>
             </div>
@@ -118,35 +118,56 @@
                 </div>
                 <div class="tickets-list">
                     @foreach (var ticket in ViewBag.Tickets)
-                    {
-                        <div class="ticket-item @(ticket.IsActive ? "active" : "")">
-                            <div class="ticket-badge">
-                                @if (ticket.IsActive)
-                                {
-                                    <i class="fas fa-check-circle"></i>
-                                }
-                                else
-                                {
-                                    <i class="fas fa-hourglass-half"></i>
-                                }
-                            </div>
-                            <div class="ticket-details">
-                                <h4>@ticket.Type</h4>
-                                <span class="price">$@ticket.Price</span>
-                                @if (ticket.IsActive)
-                                {
-                                    <span class="expiry">Valid until @ticket.ExpiresAt</span>
-                                }
-                            </div>
-                            @if (!ticket.IsActive)
-                            {
-                                <form method="post" asp-action="ActivateTicket">
-                                    <input type="hidden" name="ticketId" value="@ticket.Id" />
-                                    <button type="submit" class="btn-activate">Activate</button>
-                                </form>
-                            }
-                        </div>
-                    }
+{
+    bool isExpired = ticket.ExpiresAt != null && ticket.ExpiresAt < DateTime.Now;
+
+    <div class="ticket-item 
+        @(isExpired ? "expired" : ticket.IsActive ? "active" : "")">
+
+        <div class="ticket-badge">
+            @if (isExpired)
+            {
+                <i class="fas fa-times-circle"></i>
+            }
+            else if (ticket.IsActive)
+            {
+                <i class="fas fa-check-circle"></i>
+            }
+            else
+            {
+                <i class="fas fa-hourglass-half"></i>
+            }
+        </div>
+
+        <div class="ticket-details">
+            <h4>@ticket.Type</h4>
+            <span class="price">$@ticket.Price</span>
+
+            @if (isExpired)
+            {
+                <span class="expiry expired-text">
+                    Expired on @ticket.ExpiresAt
+                </span>
+            }
+            else if (ticket.IsActive)
+            {
+                <span class="expiry">
+                    Valid until @ticket.ExpiresAt
+                </span>
+            }
+        </div>
+
+        @if (!ticket.IsActive && !isExpired)
+        {
+            <form method="post" asp-action="ActivateTicket">
+                <input type="hidden" name="ticketId" value="@ticket.Id" />
+                <button type="submit" class="btn-activate">
+                    Activate
+                </button>
+            </form>
+        }
+    </div>
+}
                 </div>
             </div>
         </main>
@@ -162,7 +183,6 @@
                     to: "@trip.ToCity",
                     bus: "@trip.BusName",
                     time: "@trip.DepartureTime",
-                    price: "@trip.Price"
                 },
                 </text>
             }
