@@ -61,7 +61,7 @@ namespace BusBookingSystem.Controllers
              }
             else
             {
-                return RedirectToAction("Home", "Home");
+                return RedirectToAction("Index", "Dashboard");
            }
                 
             }
