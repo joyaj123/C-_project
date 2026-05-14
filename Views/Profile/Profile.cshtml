@@ -84,8 +84,8 @@
                     </div>
                 </div>
 
-                <button class="edit-btn" onclick="alert('Edit profile feature coming soon')">
-                    <i class="fas fa-edit"></i> Edit Profile
+                <button class="edit-btn" onclick="showToast()">
+                 <i class="fas fa-edit"></i> Edit Profile 
                 </button>
             </div>
 
@@ -195,6 +195,28 @@
                 inactiveDiv.classList.add('active');
             }
         }
+    function showToast() {
+
+        let toast = document.createElement("div");
+        toast.className = "toast-message";
+        toast.innerText = "Edit profile feature coming soon";
+
+        document.body.appendChild(toast);
+
+        // force reflow so animation works
+        setTimeout(() => {
+            toast.classList.add("show");
+        }, 10);
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }, 3000);
+    }
+
     </script>
 </body>
 </html>
