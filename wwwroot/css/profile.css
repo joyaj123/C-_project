@@ -505,3 +505,22 @@ body {
         justify-content: center;
     }
 }
+.toast-message {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #081dda;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.toast-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
